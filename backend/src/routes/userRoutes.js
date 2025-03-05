@@ -1,10 +1,16 @@
-const express = require('express');
-const {getAllUser, deleteUser} = require('../controllers/userController') 
+const express = require("express");
+const { auth, authorize } = require("../middleware/authMiddleware");
+const { getAllUsers, getUserProfile, promoteUser } = require("../controllers/userController");
 
 const router = express.Router();
 
-router.get("/", getAllUser);
-router.delete("/:userId", deleteUser);
+// Get All Users (Admin Only)
+router.get("/", auth, authorize(["admin"]), getAllUsers);
 
+// Get Logged-in User Profile
+router.get("/me", auth, getUserProfile);
 
-module.exports = router
+// Promote User to Librarian (Admin Only)
+router.patch("/promote/:id", auth, authorize(["admin"]), promoteUser);
+
+module.exports = router;
