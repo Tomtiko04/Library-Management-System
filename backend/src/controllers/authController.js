@@ -19,18 +19,13 @@ exports.register = async (req, res) => {
 		const { name, email, password, role, libraryId } = req.body;
 
 		let user = await User.findOne({ email });
-		console.log("Usere:", user);
 		if (user) return res.status(400).json({ message: "User already exists" });
 
-		if (role === "underGraduate" && !libraryId) {
+		if ((role === "underGraduate" || role === "postGraduate") && !libraryId) {
 			return res.status(400).json({ message: "Library ID is required for students" });
 		}
 
-		if (role === "postGraduate" && !libraryId) {
-			return res.status(400).json({ message: "Library ID is required for students" });
-		}
-
-		// Ensure unique Library ID
+		// ✅ Ensure unique Library ID only for students
 		if (role === "underGraduate" || role === "postGraduate") {
 			const existingLibraryId = await User.findOne({ libraryId });
 			if (existingLibraryId) {
@@ -51,7 +46,7 @@ exports.register = async (req, res) => {
 
 		res.status(201).json({ message: "User registered successfully" });
 	} catch (error) {
-		res.status(500).json({ message: "Server Error" });
+		res.status(500).json({ message: error.message });
 	}
 };
 
@@ -106,4 +101,3 @@ exports.login = async (req, res) => {
 // 		res.status(500).json({ message: "Server Error" });
 // 	}
 // };
-
