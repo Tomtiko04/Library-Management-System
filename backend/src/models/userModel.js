@@ -8,8 +8,9 @@ const UserSchema = new mongoose.Schema(
 		libraryId: { type: String, unique: true, sparse: true }, // Only for students
 		role: {
 			type: String,
-			enum: ["student", "librarian", "admin"],
-			default: "student",
+			enum: ["underGraduate", "postGraduate", "librarian", "admin"],
+			// default: "underGraduate",
+			required: true,
 		},
 		fines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fine" }],
 		borrowedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "BorrowedBook" }],

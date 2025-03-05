@@ -22,12 +22,16 @@ exports.register = async (req, res) => {
 		console.log("Usere:", user);
 		if (user) return res.status(400).json({ message: "User already exists" });
 
-		if (role === "student" && !libraryId) {
+		if (role === "underGraduate" && !libraryId) {
+			return res.status(400).json({ message: "Library ID is required for students" });
+		}
+
+		if (role === "postGraduate" && !libraryId) {
 			return res.status(400).json({ message: "Library ID is required for students" });
 		}
 
 		// Ensure unique Library ID
-		if (role === "student") {
+		if (role === "underGraduate" || role === "postGraduate") {
 			const existingLibraryId = await User.findOne({ libraryId });
 			if (existingLibraryId) {
 				return res.status(400).json({ message: "Library ID already in use" });
@@ -40,7 +44,7 @@ exports.register = async (req, res) => {
 			email,
 			password: hashedPassword,
 			role,
-			libraryId: role === "student" ? libraryId : null,
+			libraryId: role === "underGraduate" || role === "postGraduate" ? libraryId : null,
 		});
 
 		await user.save();
