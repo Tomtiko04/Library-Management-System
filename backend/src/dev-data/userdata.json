@@ -1,0 +1,42 @@
+[
+	{
+		"name": "Aliyu Bello",
+		"email": "aliyu.ug@example.com",
+		"password": "password123",
+		"role": "underGraduate",
+		"libraryId": "UG2024001"
+	},
+	{
+		"name": "Fatima Yusuf",
+		"email": "fatima.pg@example.com",
+		"password": "password123",
+		"role": "postGraduate",
+		"libraryId": "PG2024001"
+	},
+	{
+		"name": "John Doe",
+		"email": "john.librarian@example.com",
+		"password": "password123",
+		"role": "librarian"
+	},
+	{
+		"name": "Aisha Ibrahim",
+		"email": "aisha.admin@example.com",
+		"password": "password123",
+		"role": "admin"
+	},
+	{
+		"name": "Oluwaseun David",
+		"email": "seun.ug@example.com",
+		"password": "password123",
+		"role": "underGraduate",
+		"libraryId": "UG2024002"
+	},
+	{
+		"name": "Habiba Lawal",
+		"email": "habiba.pg@example.com",
+		"password": "password123",
+		"role": "postGraduate",
+		"libraryId": "PG2024002"
+	}
+]
