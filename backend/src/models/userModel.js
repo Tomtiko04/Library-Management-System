@@ -15,11 +15,25 @@ const UserSchema = new mongoose.Schema(
 			// default: "underGraduate",
 			required: true,
 		},
+		borrowerTickets: {
+			type: Number,
+			default: function () {
+				return this.role === "underGraduate" ? 2 : this.role === "postGraduate" ? 4 : 0;
+			},
+		},
 		fines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fine" }],
 		borrowedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "BorrowedBook" }],
 	},
 	{ timestamps: true }
 );
+
+// UserSchema.pre(/^find/, function (next) {
+// 	this.find({
+// 		role: { $ne: "admin" },
+// 	});
+
+// 	next();
+// });
 
 const User = mongoose.model("User", UserSchema);
 
