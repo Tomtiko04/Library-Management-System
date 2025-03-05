@@ -20,7 +20,11 @@ const bookSchema = new mongoose.Schema({
 	dueDate: {
         type: Number,
         default: 14
-    }
+    }, 
+	loanPeriod: {
+		type: Number,
+		default: 14,
+	},
 }, {
     timestamps: true
 });

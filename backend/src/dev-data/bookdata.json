@@ -1,0 +1,136 @@
+[
+	{
+		"title": "Clean Code",
+		"author": "Robert C. Martin",
+		"category": "Programming",
+		"loanPeriod": 14
+	},
+	{
+		"title": "Introduction to Algorithms",
+		"author": "Thomas H. Cormen",
+		"category": "Computer Science",
+		"loanPeriod": 21
+	},
+	{
+		"title": "The Pragmatic Programmer",
+		"author": "Andrew Hunt & David Thomas",
+		"category": "Software Development",
+		"loanPeriod": 14
+	},
+	{
+		"title": "JavaScript: The Good Parts",
+		"author": "Douglas Crockford",
+		"category": "Web Development",
+		"loanPeriod": 14
+	},
+	{
+		"title": "Data Structures and Algorithms in Python",
+		"author": "Michael T. Goodrich",
+		"category": "Algorithms",
+		"loanPeriod": 21
+	},
+
+  {
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "category": "Programming",
+    "loanPeriod": 14
+  },
+  {
+    "title": "Introduction to Algorithms",
+    "author": "Thomas H. Cormen",
+    "category": "Computer Science",
+    "loanPeriod": 21
+  },
+  {
+    "title": "The Pragmatic Programmer",
+    "author": "Andrew Hunt & David Thomas",
+    "category": "Software Development",
+    "loanPeriod": 14
+  },
+  {
+    "title": "JavaScript: The Good Parts",
+    "author": "Douglas Crockford",
+    "category": "Web Development",
+    "loanPeriod": 14
+  },
+  {
+    "title": "Data Structures and Algorithms in Python",
+    "author": "Michael T. Goodrich",
+    "category": "Algorithms",
+    "loanPeriod": 21
+  },
+  {
+    "title": "You Don't Know JS",
+    "author": "Kyle Simpson",
+    "category": "JavaScript",
+    "loanPeriod": 14
+  },
+  {
+    "title": "Design Patterns: Elements of Reusable Object-Oriented Software",
+    "author": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+    "category": "Software Engineering",
+    "loanPeriod": 21
+  },
+  {
+    "title": "Artificial Intelligence: A Modern Approach",
+    "author": "Stuart Russell, Peter Norvig",
+    "category": "Artificial Intelligence",
+    "loanPeriod": 28
+  },
+  {
+    "title": "Python Crash Course",
+    "author": "Eric Matthes",
+    "category": "Python Programming",
+    "loanPeriod": 14
+  },
+  {
+    "title": "Refactoring: Improving the Design of Existing Code",
+    "author": "Martin Fowler",
+    "category": "Software Development",
+    "loanPeriod": 14
+  },
+  {
+    "title": "Deep Learning",
+    "author": "Ian Goodfellow, Yoshua Bengio, Aaron Courville",
+    "category": "Machine Learning",
+    "loanPeriod": 28
+  },
+  {
+    "title": "Fluent Python",
+    "author": "Luciano Ramalho",
+    "category": "Python Programming",
+    "loanPeriod": 14
+  },
+  {
+    "title": "The Mythical Man-Month",
+    "author": "Frederick P. Brooks Jr.",
+    "category": "Software Engineering",
+    "loanPeriod": 21
+  },
+  {
+    "title": "Operating System Concepts",
+    "author": "Abraham Silberschatz, Peter B. Galvin, Greg Gagne",
+    "category": "Operating Systems",
+    "loanPeriod": 21
+  },
+  {
+    "title": "Computer Networking: A Top-Down Approach",
+    "author": "James F. Kurose, Keith W. Ross",
+ 
+    "category": "Networking",
+    "loanPeriod": 21
+  },
+  {
+    "title": "The C Programming Language",
+    "author": "Brian W. Kernighan, Dennis M. Ritchie",
+    "category": "C Programming",
+    "loanPeriod": 14
+  },
+  {
+    "title": "The C++ Programming Language",
+    "author": "Bjarne Stroustrup",
+    "category": "C++ Programming",
+    "loanPeriod": 14
+  }
+]
