@@ -1,7 +1,7 @@
+const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-const User = require("../models/userModel");
 
 const generateToken = (user) => {
 	if (!process.env.JWT_SECRET) {
@@ -30,12 +30,25 @@ exports.register = async (req, res) => {
 		let user = await User.findOne({ email });
 		if (user) return res.status(400).json({ message: "User already exists" });
 
-		if ((role === "underGraduate" || role === "postGraduate") && !libraryId) {
-			return res.status(400).json({ message: "Library ID is required for students" });
+		if (
+			(role === "underGraduate" ||
+				role === "postGraduate" ||
+				role === "faculty" ||
+				role === "nonTeachingStaff" ||
+				role === "researcher") &&
+			!libraryId
+		) {
+			return res.status(400).json({ message: "Library ID is required" });
 		}
 
 		// ✅ Ensure unique Library ID only for students
-		if (role === "underGraduate" || role === "postGraduate") {
+		if (
+			role === "underGraduate" ||
+			role === "postGraduate" ||
+			role === "faculty" ||
+			role === "nonTeachingStaff" ||
+			role === "researcher"
+		) {
 			const existingLibraryId = await User.findOne({ libraryId });
 			if (existingLibraryId) {
 				return res.status(400).json({ message: "Library ID already in use" });
@@ -48,7 +61,14 @@ exports.register = async (req, res) => {
 			email,
 			password: hashedPassword,
 			role,
-			libraryId: role === "underGraduate" || role === "postGraduate" ? libraryId : null,
+			libraryId:
+				role === "underGraduate" ||
+				role === "postGraduate" ||
+				role === "faculty" ||
+				role === "nonTeachingStaff" ||
+				role === "researcher"
+					? libraryId
+					: null,
 		});
 
 		await user.save();
@@ -85,15 +105,15 @@ exports.login = async (req, res) => {
 
 	try {
 		const user = await User.findOne({ email });
-		console.log("🔍 User trying to log in:", user); // Log the user
+		// console.log("🔍 User trying to log in:", user); // Log the user
 
 		if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-		console.log("🔍 Stored Hashed Password:", user.password);
-		console.log("🔍 Entered Password:", password);
+		// console.log("🔍 Stored Hashed Password:", user.password);
+		// console.log("🔍 Entered Password:", password);
 
 		const isMatch = await bcrypt.compare(password, user.password);
-		console.log("🔍 Password Match:", isMatch); // Log password comparison
+		// console.log("🔍 Password Match:", isMatch); // Log password comparison
 
 		if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
@@ -103,7 +123,7 @@ exports.login = async (req, res) => {
 			user: { id: user._id, name: user.name, role: user.role, libraryId: user.libraryId },
 		});
 	} catch (error) {
-		console.error("❌ Internal Server Error:", error);
+		// console.error("❌ Internal Server Error:", error);
 		res.status(500).json({ message: "Server Error" });
 	}
 };

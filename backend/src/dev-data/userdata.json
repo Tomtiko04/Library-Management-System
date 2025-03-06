@@ -1,42 +1,49 @@
 [
 	{
-		"name": "Aliyu Bello",
-		"email": "aliyu.ug@example.com",
+		"name": "Aliyah Bello",
+		"email": "aliyah.ug@example.com",
 		"password": "password123",
 		"role": "underGraduate",
-		"libraryId": "UG2024001"
+		"libraryId": "UG12345"
 	},
 	{
-		"name": "Fatima Yusuf",
-		"email": "fatima.pg@example.com",
+		"name": "Ibrahim Yusuf",
+		"email": "ibrahim.pg@example.com",
 		"password": "password123",
 		"role": "postGraduate",
-		"libraryId": "PG2024001"
+		"libraryId": "PG56789"
 	},
 	{
-		"name": "John Doe",
-		"email": "john.librarian@example.com",
+		"name": "Dr. Adebayo",
+		"email": "adebayo.faculty@example.com",
+		"password": "password123",
+		"role": "faculty",
+		"libraryId": "FAC10234"
+	},
+	{
+		"name": "Mr. Akinwale",
+		"email": "akinwale.staff@example.com",
+		"password": "password123",
+		"role": "nonTeachingStaff",
+		"libraryId": "STAFF88976"
+	},
+	{
+		"name": "Prof. Williams",
+		"email": "williams.researcher@example.com",
+		"password": "password123",
+		"role": "researcher",
+		"libraryId": "RES44321"
+	},
+	{
+		"name": "Aisha Ibrahim",
+		"email": "aisha.librarian@example.com",
 		"password": "password123",
 		"role": "librarian"
 	},
 	{
-		"name": "Aisha Ibrahim",
-		"email": "aisha.admin@example.com",
+		"name": "Olawale Ade",
+		"email": "olawale.admin@example.com",
 		"password": "password123",
 		"role": "admin"
-	},
-	{
-		"name": "Oluwaseun David",
-		"email": "seun.ug@example.com",
-		"password": "password123",
-		"role": "underGraduate",
-		"libraryId": "UG2024002"
-	},
-	{
-		"name": "Habiba Lawal",
-		"email": "habiba.pg@example.com",
-		"password": "password123",
-		"role": "postGraduate",
-		"libraryId": "PG2024002"
 	}
 ]
