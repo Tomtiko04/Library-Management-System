@@ -58,6 +58,7 @@ const UserSchema = new mongoose.Schema(
 		},
 		fines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fine" }],
 		borrowedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "BorrowedBook" }],
+		borrowingHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "BorrowedBook" }],
 	},
 	{ timestamps: true }
 );
