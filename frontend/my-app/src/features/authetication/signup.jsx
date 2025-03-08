@@ -213,7 +213,6 @@ const SignUp = () => {
 														className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 														type="button"
 														onClick={() => setShowPassword(!showPassword)}>
-														<i className="ri-eye-fill align-middle"></i>
 														{showPassword ? (
 															<i className="mdi mdi-eye-off-outline"></i>
 														) : (
