@@ -1,12 +1,26 @@
-const express = require('express');
-const borrowedBookController = require('../controllers/borrowBookController');
-
+const express = require("express");
+const { auth, authorize } = require("../middleware/authMiddleware");
+const {
+	borrowBook,
+	getAllBorrowedBooks,
+	getUserBorrowingHistory,
+	renewBook,
+	returnBook,
+} = require("../controllers/borrowBookController");
 
 const router = express.Router();
 
-router.route("/").get(borrowedBookController.getBorrowedBooks).post(borrowedBookController.borrowBook);
+// Borrow a Book (Authenticated Users)
+router.post("/", auth, borrowBook);
 
-router.patch("/renew/:borrowId", borrowedBookController.renewBook);
-router.patch("/return/:borrowId", borrowedBookController.returnBook);
+router.get("/", auth, authorize(["admin", "librarian"]), getAllBorrowedBooks);
+
+router.get("/history", auth, getUserBorrowingHistory);
+
+// ✅ Renew a Borrowed Book (Authenticated Users)
+router.post("/renew", auth, renewBook);
+
+// ✅ Return a Borrowed Book (Authenticated Users)
+router.post("/return", auth, returnBook);
 
 module.exports = router;
