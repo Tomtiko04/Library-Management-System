@@ -109,3 +109,125 @@ exports.getUserBorrowingHistory = async (req, res) => {
 		res.status(500).json({ message: "Server error" });
 	}
 };
+
+// ✅ Renew Borrowed Book
+exports.renewBook = async (req, res) => {
+	try {
+		const { bookId } = req.body;
+		const user = await User.findById(req.user.id);
+		const borrowedBook = await BorrowedBook.findOne({
+			user: user._id,
+			book: bookId,
+			status: "borrowed",
+		});
+
+		if (!user) return res.status(404).json({ message: "User not found" });
+		if (!borrowedBook)
+			return res
+				.status(400)
+				.json({ message: "You have not borrowed this book or it's already returned" });
+
+		// ✅ Check if the book is already overdue
+		const today = new Date();
+		if (borrowedBook.dueDate < today) {
+			return res
+				.status(400)
+				.json({ message: "Cannot renew an overdue book. Please return it first and clear fines." });
+		}
+
+		// ✅ Restrict renewal: Only allowed within 3 days of due date
+		const daysBeforeRenewal = 3;
+		const daysLeft = Math.ceil((borrowedBook.dueDate - today) / (1000 * 60 * 60 * 24));
+
+		if (daysLeft > daysBeforeRenewal) {
+			return res
+				.status(400)
+				.json({ message: `You can only renew within ${daysBeforeRenewal} days of the due date.` });
+		}
+
+		// ✅ Check if the user has already renewed this book twice
+		if (borrowedBook.renewals >= 2) {
+			return res.status(400).json({ message: "Maximum renewal limit reached for this book." });
+		}
+
+		// ✅ Extend due date based on role
+		const renewalPeriod = user.role === "underGraduate" ? 7 : 14;
+		borrowedBook.dueDate.setDate(borrowedBook.dueDate.getDate() + renewalPeriod);
+		borrowedBook.renewals += 1;
+
+		await borrowedBook.save();
+
+		res.status(200).json({
+			message: "Book renewed successfully",
+			renewedBook: borrowedBook,
+		});
+	} catch (error) {
+		res.status(500).json({ message: "Server error" });
+	}
+};
+
+// ✅ Return Borrowed Book
+exports.returnBook = async (req, res) => {
+	try {
+		const { bookId } = req.body;
+		const user = await User.findById(req.user.id);
+		const borrowedBook = await BorrowedBook.findOne({
+			user: user._id,
+			book: bookId,
+			status: "borrowed",
+		}).populate("book");
+
+		if (!user) return res.status(404).json({ message: "User not found" });
+		if (!borrowedBook)
+			return res
+				.status(400)
+				.json({ message: "You have not borrowed this book or it's already returned" });
+
+		// ✅ Check if the book is overdue
+		const today = new Date();
+		const dueDate = borrowedBook.dueDate;
+		let fine = 0;
+
+		if (today > dueDate) {
+			// Calculate the number of overdue days (excluding weekends)
+			let overdueDays = 0;
+			let currentDate = new Date(dueDate);
+
+			while (currentDate < today) {
+				currentDate.setDate(currentDate.getDate() + 1);
+				const dayOfWeek = currentDate.getDay();
+				if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+					// Exclude Saturday (6) and Sunday (0)
+					overdueDays++;
+				}
+			}
+			fine = overdueDays * 100;
+		}
+
+		// ✅ If there is a fine, store it in the User model
+		if (fine > 0) {
+			user.fines.push({ amount: fine, book: bookId, status: "unpaid" });
+		}
+
+		// ✅ Update book copies
+		const book = await Book.findById(bookId);
+		book.availableCopies += 1;
+		await book.save();
+
+		// ✅ Remove book from user's borrowed books
+		user.borrowedBooks = user.borrowedBooks.filter((b) => b.toString() !== bookId);
+		user.borrowerTickets += 1; // Restore a borrow ticket
+
+		// ✅ Mark the book as returned
+		borrowedBook.status = "returned";
+		await borrowedBook.save();
+		await user.save();
+
+		res.status(200).json({
+			message: "Book returned successfully",
+			fine: fine > 0 ? `₦${fine} overdue fine applied` : "No fine",
+		});
+	} catch (error) {
+		res.status(500).json({ message: "Server error" });
+	}
+};
