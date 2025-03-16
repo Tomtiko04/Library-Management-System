@@ -6,6 +6,8 @@ import toast, { Toaster } from "react-hot-toast";
 import SignIn from "./features/authetication/sigin";
 import { useEffect } from "react";
 import SignUp from "./features/authetication/signup";
+import Sidebar from "./components/Sidebar";
+import Dashboard from "./components/DashboardLayout";
 
 const queryClient = new QueryClient({
 	queryCache: new QueryCache({
@@ -41,6 +43,8 @@ function App() {
 					<Routes>
 						<Route path="auth/sign-in" element={<SignIn />} />
 						<Route path="auth/sign-up" element={<SignUp />}/>
+						<Route path="component/sidebar" element={<Sidebar />}/>
+						<Route path="component/dashboard" element={<Dashboard />}/>
 					</Routes>
 				</BrowserRouter>
 				<Toaster
