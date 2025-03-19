@@ -47,13 +47,13 @@ const SignIn = () => {
 					<div className="row">
 						<div className="col-lg-12">
 							<div className="text-center mt-sm-5 mb-4 text-white-50">
-								<div>
-									<Link to="/" className="d-inline-block auth-logo">
-										{/* <img src="../../assets/images/logo-light.png" alt="" height="20" /> */}
-										<h1>TASUED</h1>
+								<div className="">
+									<Link to="/" className="d-flex justify-content-center auth-logo">
+										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt=""  />
+										<h1 style={{color: 'white'}}>TASUED</h1>
 									</Link>
 								</div>
-								<p className="mt-3 fs-15 fw-medium">Tai Solarine University of Education Library</p>
+								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
 							</div>
 						</div>
 					</div>
@@ -125,9 +125,12 @@ const SignIn = () => {
 											</div>
 
 											<div className="mt-4">
+												<Link to="/component/dashboard">
+												
 												<button className="btn btn-success w-100" type="submit">
 													{isLogin ? "sign In..." : "Sign In"}
 												</button>
+												</Link>
 											</div>
 
 											<div className="mt-4 text-center">
@@ -160,7 +163,7 @@ const SignIn = () => {
 							<div className="text-center">
 								<p className="mb-0 text-muted">
 									&copy; {new Date().getFullYear()} Group 1. Crafted with{" "}
-									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev.
+									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaa, no be only you jorr.
 								</p>
 							</div>
 						</div>

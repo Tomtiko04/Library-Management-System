@@ -76,12 +76,12 @@ const SignUp = () => {
 						<div className="col-lg-12">
 							<div className="text-center mt-sm-5 mb-4 text-white-50">
 								<div>
-									<Link to="/" className="d-inline-block auth-logo">
-										{/* <img src="/assets/images/logo-light.png" alt="" height="20" /> */}
+									<Link to="/" className="d-flex justify-content-center auth-logo">
+										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt="" height="20" />
 										<h1>TASUED</h1>
 									</Link>
 								</div>
-								<p className="mt-3 fs-15 fw-medium">Tai Solarine University of Education Library</p>
+								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
 							</div>
 						</div>
 					</div>
@@ -103,7 +103,7 @@ const SignUp = () => {
 												<input
 													type="text"
 													className="form-control"
-													id="username"
+													id="name"
 													placeholder="Enter your fullname"
 													value={formData.name}
 													onChange={handleChange}
@@ -213,6 +213,7 @@ const SignUp = () => {
 														className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 														type="button"
 														onClick={() => setShowPassword(!showPassword)}>
+														<i className="ri-eye-fill align-middle"></i>
 														{showPassword ? (
 															<i className="mdi mdi-eye-off-outline"></i>
 														) : (
@@ -296,7 +297,7 @@ const SignUp = () => {
 							<div className="text-center">
 								<p className="mb-0 text-muted">
 									&copy; {new Date().getFullYear()} Group 1. Crafted with{" "}
-									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev.
+									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaaa, no be only you jorr.
 								</p>
 							</div>
 						</div>
