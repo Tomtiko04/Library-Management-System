@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useLogin } from "./useAuth";
-
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import "../../styles/Particles.css";
 import "../../styles/auth.css";
@@ -10,17 +10,105 @@ const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
-	const { login, isLogin } = useLogin();
+	const [isLoading, setIsLoading] = useState(false);
+	const [errors, setErrors] = useState({
+		email: "",
+		password: ""
+	});
+	const navigate = useNavigate();
 
-	const handleSubmit = (e) => {
+	const validateForm = () => {
+		let tempErrors = {};
+		let isValid = true;
+
+		if (!email) {
+			tempErrors.email = "Email is required";
+			isValid = false;
+		} else if (!/\S+@\S+\.\S+/.test(email)) {
+			tempErrors.email = "Email is invalid";
+			isValid = false;
+		}
+
+		if (!password) {
+			tempErrors.password = "Password is required";
+			isValid = false;
+		} 
+		// else if (password.length < 6) {
+		// 	tempErrors.password = "Password must be at least 6 characters";
+		// 	isValid = false;
+		// }
+
+		setErrors(tempErrors);
+		return isValid;
+	};
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		login({email, password}, {
-            onSettled: () => {
-                setEmail("");
-                setPassword("");
-            }
-        });
-    
+		
+		if (!validateForm()) {
+			// toast.error("Please check all required fields");
+			return;
+		}
+
+		setIsLoading(true);
+
+		try {
+			const response = await axios.post('http://localhost:5000/api/v1/auth/login', {
+				email,
+				password
+			});
+
+			// Check for successful status code
+			if (response.status === 200) {
+				// Save token and user data to localStorage
+				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('user', JSON.stringify(response.data.user));
+
+				// Create axios instance with token for future requests
+				axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
+				// Clear form
+				setEmail("");
+				setPassword("");
+
+				// Show success message
+				toast.success("User logged in successfully!");
+
+				// Navigate to dashboard
+				navigate('/component/dashboard');
+			}
+
+		} catch (error) {
+			console.error('Login error:', error);
+			
+			if (error.response) {
+				// Server responded with an error status
+				switch (error.response.status) {
+					case 400:
+						toast.error("Invalid email or password");
+						break;
+					case 401:
+						toast.error("Unauthorized access");
+						break;
+					case 404:
+						toast.error("User not found");
+						break;
+					case 500:
+						toast.error("Server error. Please try again later");
+						break;
+					default:
+						toast.error(error.response.data.message || "Login failed");
+				}
+			} else if (error.request) {
+				// Request was made but no response received
+				toast.error("No response from server. Please check your internet connection");
+			} else {
+				// Something happened in setting up the request
+				toast.error("An error occurred. Please try again");
+			}
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -74,12 +162,22 @@ const SignIn = () => {
 												</label>
 												<input
 													type="email"
-													className="form-control"
+													className={`form-control ${errors.email ? 'is-invalid' : ''}`}
 													id="email"
 													placeholder="Enter email"
 													value={email}
-													onChange={(e) => setEmail(e.target.value)}
+													onChange={(e) => {
+														setEmail(e.target.value);
+														if (errors.email) {
+															setErrors({...errors, email: ""});
+														}
+													}}
 												/>
+												{errors.email && (
+													<div className="invalid-feedback">
+														{errors.email}
+													</div>
+												)}
 											</div>
 
 											<div className="mb-3">
@@ -94,11 +192,16 @@ const SignIn = () => {
 												<div className="position-relative auth-pass-inputgroup mb-3">
 													<input
 														type={showPassword ? "text" : "password"}
-														className="form-control pe-5"
+														className={`form-control pe-5 ${errors.password ? 'is-invalid' : ''}`}
 														placeholder="Enter password"
 														id="password-input"
 														value={password}
-														onChange={(e) => setPassword(e.target.value)}
+														onChange={(e) => {
+															setPassword(e.target.value);
+															if (errors.password) {
+																setErrors({...errors, password: ""});
+															}
+														}}
 													/>
 													<button
 														className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
@@ -110,6 +213,11 @@ const SignIn = () => {
 															<i className="mdi mdi-eye-outline"></i>
 														)}
 													</button>
+													{errors.password && (
+														<div className="invalid-feedback">
+															{errors.password}
+														</div>
+													)}
 												</div>
 											</div>
 
@@ -125,12 +233,13 @@ const SignIn = () => {
 											</div>
 
 											<div className="mt-4">
-												<Link to="/component/dashboard">
-												
-												<button className="btn btn-success w-100" type="submit">
-													{isLogin ? "sign In..." : "Sign In"}
+												<button 
+													className="btn btn-success w-100" 
+													type="submit"
+													disabled={isLoading}
+												>
+													{isLoading ? "Signing In..." : "Sign In"}
 												</button>
-												</Link>
 											</div>
 
 											<div className="mt-4 text-center">

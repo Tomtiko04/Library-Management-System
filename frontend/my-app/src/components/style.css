@@ -410,3 +410,100 @@
     cursor: pointer;
   }
 }
+/* Sidebar scrolling styles */
+#scrollbar {
+    height: calc(100vh - 50px); /* Adjusted to match new navbar-brand-box height */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar styling */
+#scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+#scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Sidebar container styles */
+.navbar-menu {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+/* Navbar brand box styles */
+.navbar-brand-box {
+    padding: 0 1.3rem;
+    height: 50px; /* Reduced from 70px */
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Content container styles */
+.container-fluid {
+    padding-top: 20px; /* Reduced from 70px */
+}
+
+/* Menu dropdown styles */
+.menu-dropdown {
+    max-height: 75vh; /* Limit dropdown height */
+    overflow-y: auto;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar-menu {
+        width: 100%;
+        transform: translateX(-100%);
+    }
+
+    .navbar-menu.open {
+        transform: translateX(0);
+    }
+
+    #scrollbar {
+        height: calc(100vh - 60px); /* Slightly smaller for mobile */
+    }
+}
+
+/* Ensure links don't get cut off */
+.nav-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Add some padding to the bottom of the menu */
+.navbar-nav {
+    padding-bottom: 2rem;
+}
+
+/* Menu title spacing */
+.menu-title {
+    margin-top: 10px; /* Reduced spacing */
+    margin-bottom: 10px;
+}
+
+/* Adjust spacing between menu items */
+.nav-item {
+    margin-bottom: 2px; /* Reduced spacing between items */
+}
+

@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "./useAuth";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import "../../styles/Particles.css";
 import "../../styles/auth.css";
 
 const SignUp = () => {
+	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
-		role: "",
+		role: "underGraduate",
 		libraryId: "",
 	});
 	const [showPassword, setShowPassword] = useState(false);
+	const [errors, setErrors] = useState({});
 	const [passwordValidation, setPasswordValidation] = useState({
 		length: false,
 		lower: false,
@@ -25,30 +30,127 @@ const SignUp = () => {
 
 	const { register, isRegistering } = useRegister();
 
-	const handleChange = (e) => {
-		const { id, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[id]: value,
-		}));
-
-		if (id === "password-input") {
-			validatePassword(value);
-		}
-	};
+	// Check if libraryId should be shown
+	const shouldShowLibraryId = !["admin", "librarian"].includes(formData.role);
 
 	const validatePassword = (password) => {
-		setPasswordValidation({
+		return {
 			length: password.length >= 8,
 			lower: /[a-z]/.test(password),
 			upper: /[A-Z]/.test(password),
 			number: /[0-9]/.test(password),
-		});
+		};
 	};
 
-	const handleSubmit = (e) => {
+	const handleChange = (e) => {
+		const { id, value } = e.target;
+		setFormData(prev => ({
+			...prev,
+			[id]: value,
+		}));
+
+		if (id === "password") {
+			setPasswordValidation(validatePassword(value));
+		}
+
+		// Clear error when user types
+		if (errors[id]) {
+			setErrors(prev => ({
+				...prev,
+				[id]: ""
+			}));
+		}
+	};
+
+	const validateForm = () => {
+		const newErrors = {};
+		
+		// Name validation
+		if (!formData.name.trim()) {
+			newErrors.name = "Name is required";
+		}
+
+		// Email validation
+		if (!formData.email) {
+			newErrors.email = "Email is required";
+		} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+			newErrors.email = "Email is invalid";
+		}
+
+		// Password validation
+		if (!formData.password) {
+			newErrors.password = "Password is required";
+		} 
+		// else {
+		// 	const validation = validatePassword(formData.password);
+		// 	if (!Object.values(validation).every(Boolean)) {
+		// 		newErrors.password = "Password doesn't meet requirements";
+		// 	}
+		// }
+
+		// Confirm Password validation
+		if (formData.password !== formData.confirmPassword) {
+			newErrors.confirmPassword = "Passwords do not match";
+		}
+
+		// Library ID validation (only if required)
+		if (shouldShowLibraryId && !formData.libraryId) {
+			newErrors.libraryId = "Library ID is required";
+		}
+
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
+	};
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		// Add your signup logic here
+
+		if (!validateForm()) {
+			toast.error("Please check all required fields");
+			return;
+		}
+
+		setIsLoading(true);
+
+		try {
+			const response = await axios.post(`http://localhost:5000/api/v1/auth/register`, {
+				name: formData.name,
+				email: formData.email,
+				password: formData.password,
+				role: formData.role,
+				...(shouldShowLibraryId && { libraryId: formData.libraryId })
+			});
+
+			if (response.status === 201) {
+				toast.success("Registration successful!");
+				navigate('/auth/sign-in');
+			}
+
+		} catch (error) {
+			console.error('Registration error:', error);
+			
+			if (error.response) {
+				switch (error.response.status) {
+					case 400:
+						toast.error("Invalid registration data");
+						break;
+					case 409:
+						toast.error("Email already exists");
+						break;
+					case 500:
+						toast.error("Server error. Please try again later");
+						break;
+					default:
+						toast.error(error.response.data.message || "Registration failed");
+				}
+			} else if (error.request) {
+				toast.error("No response from server. Please check your internet connection");
+			} else {
+				toast.error("An error occurred. Please try again");
+			}
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -97,87 +199,83 @@ const SignUp = () => {
 									<div className="p-2 mt-4">
 										<form className="needs-validation" onSubmit={handleSubmit} noValidate>
 											<div className="mb-3">
-												<label htmlFor="username" className="form-label">
+												<label htmlFor="name" className="form-label">
 													Full Name <span className="text-danger">*</span>
 												</label>
 												<input
 													type="text"
-													className="form-control"
+													className={`form-control ${errors.name ? 'is-invalid' : ''}`}
 													id="name"
 													placeholder="Enter your fullname"
 													value={formData.name}
 													onChange={handleChange}
-													required
 												/>
-												<div className="invalid-feedback">Please enter your fullname</div>
+												{errors.name && <div className="invalid-feedback">{errors.name}</div>}
 											</div>
 
 											<div className="mb-3">
-												<label htmlFor="useremail" className="form-label">
+												<label htmlFor="email" className="form-label">
 													Email <span className="text-danger">*</span>
 												</label>
 												<input
 													type="email"
-													className="form-control"
-													id="useremail"
+													className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+													id="email"
 													placeholder="Enter email address"
 													value={formData.email}
 													onChange={handleChange}
-													required
 												/>
-												<div className="invalid-feedback">Please enter email</div>
+												{errors.email && <div className="invalid-feedback">{errors.email}</div>}
 											</div>
 
 											<div className="mb-3">
-												<label htmlFor="libraryId" className="form-label">
-													Library ID <span className="text-danger">*</span>
+												<label htmlFor="role" className="form-label">
+													Role <span className="text-danger">*</span>
 												</label>
-												<input
-													type="text"
+												<select
 													className="form-control"
-													id="libraryId"
-													placeholder="Enter your library ID number"
-													value={formData.name}
+													id="role"
+													value={formData.role}
 													onChange={handleChange}
-													required
-												/>
-												<div className="invalid-feedback">Please enter your library ID number</div>
-											</div>
-
-											{/*TODO let the users so this is a select option drop down. The types of users: ["underGraduate",
-				"postGraduate",
-				"faculty",
-				"nonTeachingStaff",
-				"researcher",
-				"librarian",
-				"admin",]*/}
-											<div class="mb-3">
-												<label for="roleSelect" class="form-label text-muted">
-													Role <span class="text-danger">*</span>
-												</label>
-												<select class="form-control" id="roleSelect" name="role">
-													<option value="student" selected>
-														Student
-													</option>
-													<option value="One">One</option>
-													<option value="Two">Two</option>
-													<option value="Three">Three</option>
-													<option value="Four">Four</option>
-													<option value="Five">Five</option>
-													<option value="Six">Six</option>
+												>
+													<option value="underGraduate">Under-Graduate</option>
+													<option value="postGraduate">Post-Graduate</option>
+													<option value="faculty">Faculty</option>
+													<option value="nonTeachingStaff">Non-Teaching Staff</option>
+													<option value="researcher">Researcher</option>
+													<option value="librarian">Librarian</option>
+													<option value="admin">Admin</option>
 												</select>
 											</div>
 
+											{/* Conditional Library ID Input */}
+											{shouldShowLibraryId && (
+												<div className="mb-3">
+													<label htmlFor="libraryId" className="form-label">
+														Library ID <span className="text-danger">*</span>
+													</label>
+													<input
+														type="text"
+														className={`form-control ${errors.libraryId ? 'is-invalid' : ''}`}
+														id="libraryId"
+														placeholder="Enter your library ID number"
+														value={formData.libraryId}
+														onChange={handleChange}
+													/>
+													{errors.libraryId && <div className="invalid-feedback">{errors.libraryId}</div>}
+												</div>
+											)}
+
 											<div className="mb-3">
-												<label className="form-label" htmlFor="password-input">
+												<label className="form-label" htmlFor="password">
 													Password <span className="text-danger">*</span>
 												</label>
 												<div className="position-relative auth-pass-inputgroup">
 													<input
 														type={showPassword ? "text" : "password"}
-														className="form-control pe-5"
+														className={`form-control pe-5 ${errors.password ? 'is-invalid' : ''}`}
 														placeholder="Enter password"
-														id="password-input"
+														id="password"
 														value={formData.password}
 														onChange={handleChange}
 														required
@@ -192,20 +290,21 @@ const SignUp = () => {
 															<i className="mdi mdi-eye-outline"></i>
 														)}
 													</button>
+													{errors.password && <div className="invalid-feedback">{errors.password}</div>}
 												</div>
 											</div>
 
 											<div className="mb-3">
-												<label className="form-label" htmlFor="password-input">
+												<label className="form-label" htmlFor="confirmPassword">
 													Confirm Password <span className="text-danger">*</span>
 												</label>
 												<div className="position-relative auth-pass-inputgroup">
 													<input
 														type={showPassword ? "text" : "password"}
-														className="form-control pe-5"
-														placeholder="Enter password"
-														id="password-input"
-														value={formData.password}
+														className={`form-control pe-5 ${errors.confirmPassword ? 'is-invalid' : ''}`}
+														placeholder="Confirm password"
+														id="confirmPassword"
+														value={formData.confirmPassword}
 														onChange={handleChange}
 														required
 													/>
@@ -213,13 +312,13 @@ const SignUp = () => {
 														className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 														type="button"
 														onClick={() => setShowPassword(!showPassword)}>
-														<i className="ri-eye-fill align-middle"></i>
 														{showPassword ? (
 															<i className="mdi mdi-eye-off-outline"></i>
 														) : (
 															<i className="mdi mdi-eye-outline"></i>
 														)}
 													</button>
+													{errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
 												</div>
 											</div>
 
@@ -264,8 +363,12 @@ const SignUp = () => {
 											</div>
 
 											<div className="mt-4">
-												<button className="btn btn-success w-100" type="submit">
-													{isRegistering ? "Sign Up..." : "Sign Up"}
+												<button 
+													className="btn btn-success w-100" 
+													type="submit"
+													disabled={isLoading}
+												>
+													{isLoading ? "Signing Up..." : "Sign Up"}
 												</button>
 											</div>
 
