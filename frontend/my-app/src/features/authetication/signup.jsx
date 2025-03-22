@@ -30,7 +30,7 @@ const SignUp = () => {
 
 	const { register, isRegistering } = useRegister();
 
-	// Check if libraryId should be shown
+	
 	const shouldShowLibraryId = !["admin", "librarian"].includes(formData.role);
 
 	const validatePassword = (password) => {
@@ -53,7 +53,7 @@ const SignUp = () => {
 			setPasswordValidation(validatePassword(value));
 		}
 
-		// Clear error when user types
+		
 		if (errors[id]) {
 			setErrors(prev => ({
 				...prev,
@@ -65,12 +65,12 @@ const SignUp = () => {
 	const validateForm = () => {
 		const newErrors = {};
 		
-		// Name validation
+		
 		if (!formData.name.trim()) {
 			newErrors.name = "Name is required";
 		}
 
-		// Email validation
+		
 		if (!formData.email) {
 			newErrors.email = "Email is required";
 		} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -88,12 +88,12 @@ const SignUp = () => {
 		// 	}
 		// }
 
-		// Confirm Password validation
+		
 		if (formData.password !== formData.confirmPassword) {
 			newErrors.confirmPassword = "Passwords do not match";
 		}
 
-		// Library ID validation (only if required)
+		
 		if (shouldShowLibraryId && !formData.libraryId) {
 			newErrors.libraryId = "Library ID is required";
 		}

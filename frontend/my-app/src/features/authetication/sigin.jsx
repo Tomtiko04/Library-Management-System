@@ -58,23 +58,23 @@ const SignIn = () => {
 				password
 			});
 
-			// Check for successful status code
+			
 			if (response.status === 200) {
-				// Save token and user data to localStorage
+				
 				localStorage.setItem('token', response.data.token);
 				localStorage.setItem('user', JSON.stringify(response.data.user));
 
-				// Create axios instance with token for future requests
+				
 				axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
-				// Clear form
+				
 				setEmail("");
 				setPassword("");
 
-				// Show success message
+				
 				toast.success("User logged in successfully!");
 
-				// Navigate to dashboard
+				
 				navigate('/component/dashboard');
 			}
 
@@ -82,7 +82,7 @@ const SignIn = () => {
 			console.error('Login error:', error);
 			
 			if (error.response) {
-				// Server responded with an error status
+				
 				switch (error.response.status) {
 					case 400:
 						toast.error("Invalid email or password");
@@ -100,10 +100,10 @@ const SignIn = () => {
 						toast.error(error.response.data.message || "Login failed");
 				}
 			} else if (error.request) {
-				// Request was made but no response received
+				
 				toast.error("No response from server. Please check your internet connection");
 			} else {
-				// Something happened in setting up the request
+				
 				toast.error("An error occurred. Please try again");
 			}
 		} finally {

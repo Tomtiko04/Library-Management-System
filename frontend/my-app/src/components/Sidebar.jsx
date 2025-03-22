@@ -31,7 +31,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
         navigate('/auth/sign-in');
     };
 
-    // Check if user is a borrower (student, faculty, or researcher)
+   
     const isBorrower = isStudent || isFaculty || isResearcher;
 
     return (
