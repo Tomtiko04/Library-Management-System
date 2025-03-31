@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosClient from "../../utils/axios";
 import { toast } from "react-hot-toast";
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import "../../styles/Particles.css";
@@ -32,7 +32,7 @@ const SignIn = () => {
 		if (!password) {
 			tempErrors.password = "Password is required";
 			isValid = false;
-		} 
+		}
 		// else if (password.length < 6) {
 		// 	tempErrors.password = "Password must be at least 6 characters";
 		// 	isValid = false;
@@ -44,45 +44,33 @@ const SignIn = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		if (!validateForm()) {
 			// toast.error("Please check all required fields");
 			return;
 		}
+		const payload = {
+			email,
+			password
+		};
 
 		setIsLoading(true);
 
 		try {
-			const response = await axios.post('http://localhost:5000/api/v1/auth/login', {
-				email,
-				password
-			});
-
-			
-			if (response.status === 200) {
-				
-				localStorage.setItem('token', response.data.token);
-				localStorage.setItem('user', JSON.stringify(response.data.user));
-
-				
-				axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-
-				
-				setEmail("");
-				setPassword("");
-
-				
-				toast.success("User logged in successfully!");
-
-				
-				navigate('/component/dashboard');
-			}
+			axiosClient.post('/auth/login', payload)
+				.then(({ data }) => {
+					localStorage.setItem('token', data.token);
+					localStorage.setItem('user', JSON.stringify(data.user));
+					toast.success("User logged in successfully!");
+					navigate('/component/dashboard');
+				}
+				);
 
 		} catch (error) {
 			console.error('Login error:', error);
-			
+
 			if (error.response) {
-				
+
 				switch (error.response.status) {
 					case 400:
 						toast.error("Invalid email or password");
@@ -100,10 +88,10 @@ const SignIn = () => {
 						toast.error(error.response.data.message || "Login failed");
 				}
 			} else if (error.request) {
-				
+
 				toast.error("No response from server. Please check your internet connection");
 			} else {
-				
+
 				toast.error("An error occurred. Please try again");
 			}
 		} finally {
@@ -137,8 +125,8 @@ const SignIn = () => {
 							<div className="text-center mt-sm-5 mb-4 text-white-50">
 								<div className="">
 									<Link to="/" className="d-flex justify-content-center auth-logo">
-										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt=""  />
-										<h1 style={{color: 'white'}}>TASUED</h1>
+										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt="" />
+										<h1 style={{ color: 'white' }}>TASUED</h1>
 									</Link>
 								</div>
 								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
@@ -169,7 +157,7 @@ const SignIn = () => {
 													onChange={(e) => {
 														setEmail(e.target.value);
 														if (errors.email) {
-															setErrors({...errors, email: ""});
+															setErrors({ ...errors, email: "" });
 														}
 													}}
 												/>
@@ -199,7 +187,7 @@ const SignIn = () => {
 														onChange={(e) => {
 															setPassword(e.target.value);
 															if (errors.password) {
-																setErrors({...errors, password: ""});
+																setErrors({ ...errors, password: "" });
 															}
 														}}
 													/>
@@ -233,8 +221,8 @@ const SignIn = () => {
 											</div>
 
 											<div className="mt-4">
-												<button 
-													className="btn btn-success w-100" 
+												<button
+													className="btn btn-success w-100"
 													type="submit"
 													disabled={isLoading}
 												>
