@@ -179,8 +179,12 @@ const SignUp = () => {
 							<div className="text-center mt-sm-5 mb-4 text-white-50">
 								<div>
 									<Link to="/" className="d-flex justify-content-center auth-logo">
-										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt="" height="20" />
-										<h1>TASUED</h1>
+										<img
+											src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png"
+											alt=""
+											height="20"
+										/>
+										<h1 style={{ color: "white" }}>TASUED</h1>
 									</Link>
 								</div>
 								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
@@ -204,7 +208,7 @@ const SignUp = () => {
 												</label>
 												<input
 													type="text"
-													className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+													className={`form-control ${errors.name ? "is-invalid" : ""}`}
 													id="name"
 													placeholder="Enter your fullname"
 													value={formData.name}
@@ -219,7 +223,7 @@ const SignUp = () => {
 												</label>
 												<input
 													type="email"
-													className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+													className={`form-control ${errors.email ? "is-invalid" : ""}`}
 													id="email"
 													placeholder="Enter email address"
 													value={formData.email}
@@ -236,8 +240,7 @@ const SignUp = () => {
 													className="form-control"
 													id="role"
 													value={formData.role}
-													onChange={handleChange}
-												>
+													onChange={handleChange}>
 													<option value="underGraduate">Under-Graduate</option>
 													<option value="postGraduate">Post-Graduate</option>
 													<option value="faculty">Faculty</option>
@@ -256,13 +259,15 @@ const SignUp = () => {
 													</label>
 													<input
 														type="text"
-														className={`form-control ${errors.libraryId ? 'is-invalid' : ''}`}
+														className={`form-control ${errors.libraryId ? "is-invalid" : ""}`}
 														id="libraryId"
 														placeholder="Enter your library ID number"
 														value={formData.libraryId}
 														onChange={handleChange}
 													/>
-													{errors.libraryId && <div className="invalid-feedback">{errors.libraryId}</div>}
+													{errors.libraryId && (
+														<div className="invalid-feedback">{errors.libraryId}</div>
+													)}
 												</div>
 											)}
 
@@ -273,7 +278,7 @@ const SignUp = () => {
 												<div className="position-relative auth-pass-inputgroup">
 													<input
 														type={showPassword ? "text" : "password"}
-														className={`form-control pe-5 ${errors.password ? 'is-invalid' : ''}`}
+														className={`form-control pe-5 ${errors.password ? "is-invalid" : ""}`}
 														placeholder="Enter password"
 														id="password"
 														value={formData.password}
@@ -290,7 +295,9 @@ const SignUp = () => {
 															<i className="mdi mdi-eye-outline"></i>
 														)}
 													</button>
-													{errors.password && <div className="invalid-feedback">{errors.password}</div>}
+													{errors.password && (
+														<div className="invalid-feedback">{errors.password}</div>
+													)}
 												</div>
 											</div>
 
@@ -301,7 +308,9 @@ const SignUp = () => {
 												<div className="position-relative auth-pass-inputgroup">
 													<input
 														type={showPassword ? "text" : "password"}
-														className={`form-control pe-5 ${errors.confirmPassword ? 'is-invalid' : ''}`}
+														className={`form-control pe-5 ${
+															errors.confirmPassword ? "is-invalid" : ""
+														}`}
 														placeholder="Confirm password"
 														id="confirmPassword"
 														value={formData.confirmPassword}
@@ -318,7 +327,9 @@ const SignUp = () => {
 															<i className="mdi mdi-eye-outline"></i>
 														)}
 													</button>
-													{errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
+													{errors.confirmPassword && (
+														<div className="invalid-feedback">{errors.confirmPassword}</div>
+													)}
 												</div>
 											</div>
 
@@ -363,11 +374,10 @@ const SignUp = () => {
 											</div>
 
 											<div className="mt-4">
-												<button 
-													className="btn btn-success w-100" 
+												<button
+													className="btn btn-success w-100"
 													type="submit"
-													disabled={isLoading}
-												>
+													disabled={isLoading}>
 													{isLoading ? "Signing Up..." : "Sign Up"}
 												</button>
 											</div>
@@ -400,7 +410,8 @@ const SignUp = () => {
 							<div className="text-center">
 								<p className="mb-0 text-muted">
 									&copy; {new Date().getFullYear()} Group 1. Crafted with{" "}
-									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaaa, no be only you jorr.
+									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaaa, no be only
+									you jorr.
 								</p>
 							</div>
 						</div>
