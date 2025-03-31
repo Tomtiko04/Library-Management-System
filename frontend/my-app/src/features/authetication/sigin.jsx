@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useLogin } from "./useAuth";
-
+import { Link, useNavigate } from "react-router-dom";
+import axiosClient from "../../utils/axios";
+import { toast } from "react-hot-toast";
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import "../../styles/Particles.css";
 import "../../styles/auth.css";
@@ -10,17 +10,93 @@ const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
-	const { login, isLogin } = useLogin();
+	const [isLoading, setIsLoading] = useState(false);
+	const [errors, setErrors] = useState({
+		email: "",
+		password: ""
+	});
+	const navigate = useNavigate();
 
-	const handleSubmit = (e) => {
+	const validateForm = () => {
+		let tempErrors = {};
+		let isValid = true;
+
+		if (!email) {
+			tempErrors.email = "Email is required";
+			isValid = false;
+		} else if (!/\S+@\S+\.\S+/.test(email)) {
+			tempErrors.email = "Email is invalid";
+			isValid = false;
+		}
+
+		if (!password) {
+			tempErrors.password = "Password is required";
+			isValid = false;
+		}
+		// else if (password.length < 6) {
+		// 	tempErrors.password = "Password must be at least 6 characters";
+		// 	isValid = false;
+		// }
+
+		setErrors(tempErrors);
+		return isValid;
+	};
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		login({email, password}, {
-            onSettled: () => {
-                setEmail("");
-                setPassword("");
-            }
-        });
-    
+
+		if (!validateForm()) {
+			// toast.error("Please check all required fields");
+			return;
+		}
+		const payload = {
+			email,
+			password
+		};
+
+		setIsLoading(true);
+
+		try {
+			axiosClient.post('/auth/login', payload)
+				.then(({ data }) => {
+					localStorage.setItem('token', data.token);
+					localStorage.setItem('user', JSON.stringify(data.user));
+					toast.success("User logged in successfully!");
+					navigate('/component/dashboard');
+				}
+				);
+
+		} catch (error) {
+			console.error('Login error:', error);
+
+			if (error.response) {
+
+				switch (error.response.status) {
+					case 400:
+						toast.error("Invalid email or password");
+						break;
+					case 401:
+						toast.error("Unauthorized access");
+						break;
+					case 404:
+						toast.error("User not found");
+						break;
+					case 500:
+						toast.error("Server error. Please try again later");
+						break;
+					default:
+						toast.error(error.response.data.message || "Login failed");
+				}
+			} else if (error.request) {
+
+				toast.error("No response from server. Please check your internet connection");
+			} else {
+
+				toast.error("An error occurred. Please try again");
+			}
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -47,13 +123,13 @@ const SignIn = () => {
 					<div className="row">
 						<div className="col-lg-12">
 							<div className="text-center mt-sm-5 mb-4 text-white-50">
-								<div>
-									<Link to="/" className="d-inline-block auth-logo">
-										{/* <img src="../../assets/images/logo-light.png" alt="" height="20" /> */}
-										<h1>TASUED</h1>
+								<div className="">
+									<Link to="/" className="d-flex justify-content-center auth-logo">
+										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt="" />
+										<h1 style={{ color: 'white' }}>TASUED</h1>
 									</Link>
 								</div>
-								<p className="mt-3 fs-15 fw-medium">Tai Solarine University of Education Library</p>
+								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
 							</div>
 						</div>
 					</div>
@@ -74,12 +150,22 @@ const SignIn = () => {
 												</label>
 												<input
 													type="email"
-													className="form-control"
+													className={`form-control ${errors.email ? 'is-invalid' : ''}`}
 													id="email"
 													placeholder="Enter email"
 													value={email}
-													onChange={(e) => setEmail(e.target.value)}
+													onChange={(e) => {
+														setEmail(e.target.value);
+														if (errors.email) {
+															setErrors({ ...errors, email: "" });
+														}
+													}}
 												/>
+												{errors.email && (
+													<div className="invalid-feedback">
+														{errors.email}
+													</div>
+												)}
 											</div>
 
 											<div className="mb-3">
@@ -94,11 +180,16 @@ const SignIn = () => {
 												<div className="position-relative auth-pass-inputgroup mb-3">
 													<input
 														type={showPassword ? "text" : "password"}
-														className="form-control pe-5"
+														className={`form-control pe-5 ${errors.password ? 'is-invalid' : ''}`}
 														placeholder="Enter password"
 														id="password-input"
 														value={password}
-														onChange={(e) => setPassword(e.target.value)}
+														onChange={(e) => {
+															setPassword(e.target.value);
+															if (errors.password) {
+																setErrors({ ...errors, password: "" });
+															}
+														}}
 													/>
 													<button
 														className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
@@ -110,6 +201,11 @@ const SignIn = () => {
 															<i className="mdi mdi-eye-outline"></i>
 														)}
 													</button>
+													{errors.password && (
+														<div className="invalid-feedback">
+															{errors.password}
+														</div>
+													)}
 												</div>
 											</div>
 
@@ -125,8 +221,12 @@ const SignIn = () => {
 											</div>
 
 											<div className="mt-4">
-												<button className="btn btn-success w-100" type="submit">
-													{isLogin ? "sign In..." : "Sign In"}
+												<button
+													className="btn btn-success w-100"
+													type="submit"
+													disabled={isLoading}
+												>
+													{isLoading ? "Signing In..." : "Sign In"}
 												</button>
 											</div>
 
@@ -160,7 +260,7 @@ const SignIn = () => {
 							<div className="text-center">
 								<p className="mb-0 text-muted">
 									&copy; {new Date().getFullYear()} Group 1. Crafted with{" "}
-									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev.
+									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaa, no be only you jorr.
 								</p>
 							</div>
 						</div>
