@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import SignUp from "./features/authetication/signup";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/DashboardLayout";
+import BrowseBooks from "./components/books/Browsebooks";
 
 const queryClient = new QueryClient({
 	queryCache: new QueryCache({
@@ -45,6 +46,7 @@ function App() {
 						<Route path="auth/sign-up" element={<SignUp />}/>
 						<Route path="component/sidebar" element={<Sidebar />}/>
 						<Route path="component/dashboard" element={<Dashboard />}/>
+						<Route path="component/browsebooks" element={<BrowseBooks />}/>
 					</Routes>
 				</BrowserRouter>
 				<Toaster
