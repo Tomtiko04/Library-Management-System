@@ -171,6 +171,8 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
                             </li>
                         )}
 
+                        {/* TODO Setting for all users */}
+
                         {/* Notifications - All Users */}
                         <li className="nav-item">
                             <Link to="/notifications" className="nav-link">
