@@ -225,9 +225,9 @@
     100% { opacity: 1; }
 }
 /* Default icon color */
-.nav-icon path {
+/* .nav-icon path {
   
-}
+} */
 
 /* Change SVG icon color when the nav-link is active */
 .nav-item.active .nav-icon path {
@@ -286,9 +286,9 @@
   overflow: hidden;
   transition: transform 0.3s ease-in-out;
 }
-.login-sidebar{
+/* .login-sidebar{
   
-}
+} */
 
 .sidebar-image-container {
   display: flex;
