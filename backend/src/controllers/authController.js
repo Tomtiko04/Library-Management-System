@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+const crypto = require("crypto");
+const sendEmail = require("../utils/sendEmail");
 
 const generateToken = (user) => {
 	if (!process.env.JWT_SECRET) {
@@ -55,12 +57,17 @@ exports.register = async (req, res) => {
 			}
 		}
 
+		// Generate verification token
+		const verificationToken = crypto.randomBytes(32).toString('hex');
+        
 		const hashedPassword = await bcrypt.hash(password, 10);
 		user = new User({
 			name,
 			email,
 			password: hashedPassword,
 			role,
+			isVerified: false,
+			verificationToken,
 			libraryId:
 				role === "underGraduate" ||
 				role === "postGraduate" ||
@@ -73,7 +80,20 @@ exports.register = async (req, res) => {
 
 		await user.save();
 
-		res.status(201).json({ message: "User registered successfully" });
+		// Create verification URL
+		const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/${verificationToken}`;
+
+		// Send verification email
+		await sendEmail({
+			to: email,
+			subject: 'Verify Your Email - Library Management System',
+			text: `Dear ${name},\n\nWelcome to our Library Management System! Your account has been created and requires email verification.\n\nPlease click the link below to verify your email address:\n${verificationURL}\n\nThis link will expire in 24 hours.\n\nYour login details:\nEmail: ${email}\nRole: ${role}\n${libraryId ? `Library ID: ${libraryId}\n` : ''}\n\nBest regards,\nLibrary Management Team`
+		});
+
+		res.status(201).json({ 
+			message: "User registered successfully", 
+			info: "A verification email has been sent to your email address. Please verify your email to activate your account."
+		});
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
@@ -108,6 +128,14 @@ exports.login = async (req, res) => {
 		// console.log("🔍 User trying to log in:", user); // Log the user
 
 		if (!user) return res.status(400).json({ message: "Invalid credentials" });
+		
+		// Check if user has verified their email
+		if (!user.isVerified) {
+			return res.status(401).json({ 
+				message: "Email not verified", 
+				info: "Please verify your email before logging in. Check your inbox for the verification email."
+			});
+		}
 
 		// console.log("🔍 Stored Hashed Password:", user.password);
 		// console.log("🔍 Entered Password:", password);
@@ -158,3 +186,71 @@ exports.login = async (req, res) => {
 // 		res.status(500).json({ message: "Server Error" });
 // 	}
 // };
+
+// Email Verification
+exports.verifyEmail = async (req, res) => {
+	try {
+		const { token } = req.params;
+		
+		// Find the user with the verification token
+		const user = await User.findOne({ verificationToken: token });
+		
+		if (!user) {
+			return res.status(400).json({ 
+				message: "Invalid or expired verification token", 
+				info: "Please request a new verification email if your token has expired."
+			});
+		}
+		
+		// Update user as verified and remove verification token
+		user.isVerified = true;
+		user.verificationToken = undefined;
+		await user.save();
+		
+		// Redirect to frontend login page or send success response
+		res.status(200).json({ 
+			message: "Email verification successful", 
+			info: "Your account has been verified. You can now log in."
+		});
+	} catch (error) {
+		res.status(500).json({ message: "Server Error", error: error.message });
+	}
+};
+
+// Resend Verification Email
+exports.resendVerificationEmail = async (req, res) => {
+	try {
+		const { email } = req.body;
+		
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+		
+		if (user.isVerified) {
+			return res.status(400).json({ message: "Email already verified" });
+		}
+		
+		// Generate new verification token
+		const verificationToken = crypto.randomBytes(32).toString('hex');
+		user.verificationToken = verificationToken;
+		await user.save();
+		
+		// Create verification URL
+		const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/${verificationToken}`;
+		
+		// Send verification email
+		await sendEmail({
+			to: email,
+			subject: 'Verify Your Email - Library Management System',
+			text: `Dear ${user.name},\n\nPlease click the link below to verify your email address:\n${verificationURL}\n\nThis link will expire in 24 hours.\n\nBest regards,\nLibrary Management Team`
+		});
+		
+		res.status(200).json({ 
+			message: "Verification email sent", 
+			info: "A new verification email has been sent to your email address."
+		});
+	} catch (error) {
+		res.status(500).json({ message: "Server Error", error: error.message });
+	}
+};

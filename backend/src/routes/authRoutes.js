@@ -1,6 +1,6 @@
 const express = require("express");
 const { body } = require("express-validator");
-const { register, login } = require("../controllers/authController");
+const { register, login, verifyEmail, resendVerificationEmail } = require("../controllers/authController");
 
 const router = express.Router();
 
@@ -12,8 +12,14 @@ const validateUser = [
 	body("libraryId").optional().isString().withMessage("Library ID must be a string"),
 ];
 
+const validateEmail = [
+	body("email").isEmail().withMessage("Valid email is required"),
+];
+
 // Authentication Routes
 router.post("/register", validateUser, register);
 router.post("/login", login);
+router.get("/verify-email/:token", verifyEmail);
+router.post("/resend-verification", validateEmail, resendVerificationEmail);
 
 module.exports = router;
