@@ -35,7 +35,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
     const isBorrower = isStudent || isFaculty || isResearcher;
 
     return (
-        <div className={`app-menu navbar-menu ${isSidebarOpen ? 'open' : ''}`} 
+        <div className={`app-menu navbar-menu ${isSidebarOpen ? 'open' : 'navbar-menu-hide'}`} 
              style={{ backgroundColor: '#405189' }}>
             <div className="navbar-brand-box">
                 <button className="close-sidebar-btn" onClick={() => toggleSidebar(false)}>
@@ -65,14 +65,14 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
             <div id="scrollbar">
                 <div className="container-fluid">
                     <ul className="navbar-nav" id="navbar-nav">
-                        <li className="menu-title">
+                        {/* <li className="menu-title">
                             <i className="ri-dashboard-2-line me-2"></i>
                             <span data-key="t-library-system">Library System</span>
-                        </li>
+                        </li> */}
 
                         {/* Dashboard - All Users */}
                         <li className="nav-item">
-                            <Link to="/component/dashboard" className="nav-link">
+                            <Link to="/dashboard" className="nav-link">
                                 <i className="ri-home-4-line me-2"></i>
                                 <span>Dashboard</span>
                             </Link>
@@ -98,7 +98,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
                                 <ul className="nav nav-sm flex-column">
                                     {/* Browse Books - All Users */}
                                     <li className="nav-item">
-                                        <Link to="/component/browsebooks" className="nav-link">
+                                        <Link to="/books" className="nav-link">
                                             <i className="ri-search-line me-2"></i>
                                             Browse Books
                                         </Link>

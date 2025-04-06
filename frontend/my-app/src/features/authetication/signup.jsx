@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "./useAuth";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import axiosClient from "../../utils/axios";
+import axiosInstance from '../../utils/axiosInstance';
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import "../../styles/Particles.css";
 import "../../styles/auth.css";
@@ -113,7 +113,7 @@ const SignUp = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await axiosClient.post('/auth/register', {
+			const response = await axiosInstance.post('/auth/register', {
 				name: formData.name,
 				email: formData.email,
 				password: formData.password,
