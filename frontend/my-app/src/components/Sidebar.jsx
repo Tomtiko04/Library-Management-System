@@ -72,7 +72,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
 
                         {/* Dashboard - All Users */}
                         <li className="nav-item">
-                            <Link to="/dase/dashboard" className="nav-link">
+                            <Link to="/component/dashboard" className="nav-link">
                                 <i className="ri-home-4-line me-2"></i>
                                 <span>Dashboard</span>
                             </Link>
@@ -98,7 +98,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
                                 <ul className="nav nav-sm flex-column">
                                     {/* Browse Books - All Users */}
                                     <li className="nav-item">
-                                        <Link to="/browse-books" className="nav-link">
+                                        <Link to="/component/browsebooks" className="nav-link">
                                             <i className="ri-search-line me-2"></i>
                                             Browse Books
                                         </Link>
