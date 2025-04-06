@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "cross-env NODE_ENV=development nodemon src/server.js",
-    "start:prod": "cross-env NODE_ENV=production nodemon src/server.js"
+    "start:prod": "cross-env NODE_ENV=production node src/server.js"
   },
   "author": "Ogunneye Oyinkansola Munirat",
   "license": "ISC",
@@ -20,7 +20,7 @@
     "express-validator": "^7.2.1",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.15.0",
+    "mongodb": "^6.13.0",
     "mongoose": "^8.10.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
@@ -36,7 +36,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
-    "nodemon": "^3.1.9",
     "prettier": "^3.5.0"
   }
 }

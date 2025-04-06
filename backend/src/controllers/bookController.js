@@ -1,4 +1,5 @@
 const Book = require("../models/bookModel");
+const APIFeatures = require("../utilis/apiFeatures");
 
 // ✅ Create a Book (Admin/Librarian Only)
 exports.createBook = async (req, res) => {
@@ -30,7 +31,14 @@ exports.createBook = async (req, res) => {
 // ✅ Get All Books (Anyone)
 exports.getAllBooks = async (req, res) => {
 	try {
-		const books = await Book.find();
+		const features = new APIFeatures(Book.find(), req.query)
+			.search()
+			.filter()
+			.sort()
+			.limitFields()
+			.paginate();
+
+		const books = await features.query;
 		res.status(200).json({ result: books.length, books });
 	} catch (error) {
 		res.status(500).json({ message: "Server Error" });
