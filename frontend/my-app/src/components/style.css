@@ -95,10 +95,10 @@
   }
   
   /* Content that should be scrollable */
-  .scrollable-sidebar-content {
+  /* .scrollable-sidebar-content {
     flex: 1; 
     overflow-y: auto; 
-  }
+  } */
   .sidebar-footer {
     padding: 10px;
 
@@ -411,11 +411,11 @@
   }
 }
 /* Sidebar scrolling styles */
-#scrollbar {
-    height: calc(100vh - 50px); /* Adjusted to match new navbar-brand-box height */
+/* #scrollbar {
+    height: calc(100vh - 50px); 
     overflow-y: auto;
     overflow-x: hidden;
-}
+} */
 
 /* Custom scrollbar styling */
 #scrollbar::-webkit-scrollbar {

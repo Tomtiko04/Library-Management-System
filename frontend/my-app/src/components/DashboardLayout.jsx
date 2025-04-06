@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import Header from "./Header";
 // import { Menu, X, Home, BarChart3, Settings } from "lucide-react";
 
 export default function DashboardLayout() {
@@ -10,6 +11,7 @@ export default function DashboardLayout() {
 		<div>
 			
 		<Sidebar/>
+        <Header/>
 		<div class="main-content">
 
             <div class="page-content">
