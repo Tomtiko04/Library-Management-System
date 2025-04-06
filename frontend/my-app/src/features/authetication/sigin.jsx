@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axiosClient from "../../utils/axios";
+// import axiosClient from "../../utils/axios";
+import axiosInstance from '../../utils/axiosInstance';
 import { toast } from "react-hot-toast";
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import "../../styles/Particles.css";
@@ -57,20 +58,26 @@ const SignIn = () => {
 		setIsLoading(true);
 
 		try {
-			axiosClient.post('/auth/login', payload)
-				.then(({ data }) => {
-					localStorage.setItem('token', data.token);
-					localStorage.setItem('user', JSON.stringify(data.user));
-					toast.success("User logged in successfully!");
-					navigate('/component/dashboard');
-				}
-				);
+			// axiosClient.post('/auth/login', payload)
+            //     .then(({ data }) => {
+            //         localStorage.setItem('token', data.token);
+            //         localStorage.setItem('user', JSON.stringify(data.user));
+            //         toast.success("User logged in successfully!");
+            //         navigate('/component/dashboard');
+            //     }
+            //     );
 
+			const response = await axiosInstance.post('/auth/login', payload);
+			const { token } = response.data;
+			const { user } = response.data;
+			localStorage.setItem('token', token);
+			localStorage.setItem('user', JSON.stringify(user));
+			toast.success("User logged in successfully!");
+			navigate('/dashboard');
 		} catch (error) {
 			console.error('Login error:', error);
 
 			if (error.response) {
-
 				switch (error.response.status) {
 					case 400:
 						toast.error("Invalid email or password");
@@ -88,10 +95,8 @@ const SignIn = () => {
 						toast.error(error.response.data.message || "Login failed");
 				}
 			} else if (error.request) {
-
 				toast.error("No response from server. Please check your internet connection");
 			} else {
-
 				toast.error("An error occurred. Please try again");
 			}
 		} finally {
