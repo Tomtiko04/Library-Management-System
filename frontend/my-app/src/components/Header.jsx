@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+export default function Header({ isSidebarOpen, toggleSidebar }) {
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
 	return (
@@ -33,8 +33,10 @@ const Header = () => {
 						<button
 							type="button"
 							className="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
-							id="topnav-hamburger-icon">
-							<span className="hamburger-icon">
+							id="topnav-hamburger-icon"
+							onClick={() => toggleSidebar(!isSidebarOpen)}
+						>
+							<span className={`hamburger-icon ${isSidebarOpen ? '' : ''}`}>
 								<span></span>
 								<span></span>
 								<span></span>
@@ -536,6 +538,4 @@ const Header = () => {
 			</div>
 		</header>
 	);
-};
-
-export default Header;
+}

@@ -5182,7 +5182,8 @@ fieldset:disabled .btn {
 }
 .btn .badge {
 	position: relative;
-	top: -1px;
+	top: 13px !important;
+	right: -5px;
 }
 .alert {
 	position: relative;

@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 
 exports.auth = async (req, res, next) => {
 	try {
-		const authHeader = req.header("Authorization");
+		const authHeader = req."Authorization");
 		// console.log("🔍 Raw Authorization Header:", authHeader); // ✅ Check if header exists
 
 		if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -47,7 +47,7 @@ exports.authorize = (roles) => {
 
 ////////////////////////////////////////////////////////////////////////////
 // exports.auth = (req, res, next) => {
-// 	let token = req.header("Authorization");
+// 	let token = req."Authorization");
 
 // 	if (!token) {
 // 		return res.status(401).json({ message: "No token, authorization denied" });

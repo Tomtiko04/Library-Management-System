@@ -253,6 +253,9 @@
 .navbar-header .btn-topbar {
 	height: 42px;
 	width: 42px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 @media (max-width: 360px) {
 	.navbar-header .btn-topbar {
@@ -625,11 +628,11 @@
 	-webkit-transition: all 0.1s ease-out;
 	transition: all 0.1s ease-out;
 }
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
 	.main-content {
 		margin-left: 250px;
 	}
-}
+} */
 .page-content {
 	padding: calc(70px + 1.5rem) calc(1.5rem / 2) 60px calc(1.5rem / 2);
 }
