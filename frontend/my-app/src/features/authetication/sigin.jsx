@@ -105,7 +105,7 @@ const SignIn = () => {
 	};
 
 	return (
-		<div className="auth-page-wrapper pt-5">
+		<div className="auth-page-wrapper pt-">
 			{/* auth page bg */}
 			<div className="auth-one-bg-position auth-one-bg">
 				<div className="bg-overlay">
