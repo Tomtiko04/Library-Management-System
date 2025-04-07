@@ -12136,7 +12136,7 @@ span.flatpickr-weekday {
 	}
 }
 .auth-one-bg {
-	background-image: url(https://tasued.edu.ng/web/wp-content/uploads/2023/03/library-1536x458-1.jpg);
+	background-image: url("../images/library-bg.png");
 	background-position: center;
 	background-size: cover;
 }

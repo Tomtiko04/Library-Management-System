@@ -16,7 +16,19 @@ import { useEffect } from "react";
 import SignUp from "./features/authetication/signup";
 import Dashboard from "./components/DashboardLayout";
 import BrowseBooks from "./components/books/Browsebooks";
+import ForgottenPassword from "./features/authetication/forgottenPassword";
+import CreateNewPassword from "./features/authetication/createNewPassword";
+import ManageBooks from "./components/books/ManageBooks";
 import BookDetails from "./components/books/BookDetails";
+import AllBorrowedBooks from "./components/books/BorrowedBooks";
+import MyBorrowedBooks from "./components/books/MyBorrowedBooks";
+import RenewBooks from "./components/books/RenewBooks";
+import ReturnBooks from "./components/books/ReturnBooks";
+import BorrowingHistory from "./components/books/BorrowingHistory";
+import FinesPayments from "./components/books/FinesPayments";
+import ManageUsers from "./components/books/ManageUsers";
+import Notifications from "./components/books/Notifications";
+import Settings from "./components/books/Settings";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -48,52 +60,63 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
-      {/* <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} /> */}
-      {/* <Header isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} /> */}
-      <main
-        className={`main-content ${!isSidebarOpen ? "sidebar-closed" : ""}`}
-      >
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <Routes>
-            <Route path="auth/sign-in" element={<SignIn />} />
-            <Route path="auth/sign-up" element={<SignUp />} />
-            {/* <Route path="/sidebar" element={<Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />} /> */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            {/* <Route path="component/browsebooks" element={<BrowseBooks />}/> */}
-            <Route path="/books" element={<BrowseBooks />} />
-            <Route path="/books/:id" element={<BookDetails />} />
-          </Routes>
-        </QueryClientProvider>
-        <Toaster
-          position="top-right"
-          gutter={12}
-          containerStyle={{ margin: "8px" }}
-          toastOptions={{
-            success: {
-              duration: 3000,
-            },
-            error: {
-              duration: 5000,
-            },
-            style: {
-              fontSize: "16px",
-              maxWidth: "500px",
-              padding: "16px 24px",
-              // backgroundColor: "bg-orange-500",
-              // color: "text-white",
-            },
-          }}
-        />
-      </main>
-      {/* Mobile overlay */}
-      {/* <div 
+		<div className="app">
+			{/* <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} /> */}
+			{/* <Header isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} /> */}
+			<main className={`main-content ${!isSidebarOpen ? "sidebar-closed" : ""}`}>
+				<QueryClientProvider client={queryClient}>
+					<ReactQueryDevtools initialIsOpen={false} />
+					<Routes>
+						<Route path="auth/signin" element={<SignIn />} />
+						<Route path="auth/signup" element={<SignUp />} />
+						<Route path="auth/reset/password" element={<ForgottenPassword />} />
+						<Route path="auth/reset/newpassword" element={<CreateNewPassword />} />
+						{/* <Route path="/sidebar" element={<Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />} /> */}
+						<Route index element={<Dashboard />} />
+						<Route path="/dashboard" element={<Dashboard />} />
+						{/* <Route path="component/browsebooks" element={<BrowseBooks />}/> */}
+						<Route path="/books" element={<BrowseBooks />} />
+						<Route path="/manage-books" element={<ManageBooks />} />
+						<Route path="/all-borrowed" element={<AllBorrowedBooks />} />
+						<Route path="/my-borrowed" element={<MyBorrowedBooks />} />
+						<Route path="/renew-books" element={<RenewBooks />} />
+						<Route path="/return-books" element={<ReturnBooks />} />
+						<Route path="/borrowing-history" element={<BorrowingHistory />} />
+						<Route path="/fines" element={<FinesPayments />} />
+						<Route path="/manage-users" element={<ManageUsers />} />
+						<Route path="/notifications" element={<Notifications />} />
+						<Route path="/settings" element={<Settings />} />
+						<Route path="/books/:id" element={<BookDetails />} />
+					</Routes>
+				</QueryClientProvider>
+				<Toaster
+					position="top-right"
+					gutter={12}
+					containerStyle={{ margin: "8px" }}
+					toastOptions={{
+						success: {
+							duration: 3000,
+						},
+						error: {
+							duration: 5000,
+						},
+						style: {
+							fontSize: "16px",
+							maxWidth: "500px",
+							padding: "16px 24px",
+							// backgroundColor: "bg-orange-500",
+							// color: "text-white",
+						},
+					}}
+				/>
+			</main>
+			{/* Mobile overlay */}
+			{/* <div 
 				className={`sidebar-overlay ${isSidebarOpen ? 'active' : ''}`}
 				onClick={() => setSidebarOpen(false)}
 			/> */}
-    </div>
-  );
+		</div>
+	);
 }
 
 export default App;
