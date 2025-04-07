@@ -24,7 +24,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
     toast.success("Logout successful!");
     
     setTimeout(() => {
-        navigate("/auth/sign-in");
+        navigate("/auth/signin");
         window.location.reload();
       }, 1500);
   };

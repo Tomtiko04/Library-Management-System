@@ -122,7 +122,7 @@ const SignUp = () => {
 
 			if (response.status === 201) {
 				toast.success("Registration successful!");
-				navigate('/auth/sign-in');
+				navigate('/auth/signin');
 			}
 
 		} catch (error) {
