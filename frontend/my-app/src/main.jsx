@@ -1,16 +1,21 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import "./index.css";
 import App from "./App.jsx";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // <!-- Layout config Js -->
 import "./assets/js/layout.js";
 
-// <!-- App Css-->
-import "./assets/css/app.min.css";
+    // <!-- Bootstrap Css -->
+	import "./assets/css/bootstrap.min.css";
+    // <!-- Icons Css -->
+	// import "./assets/css/icons.min.css";
 
-// <!-- Bootstrap Css -->
-import "./assets/css/bootstrap.min.css";
+    // <!-- App Css-->
+	import "./assets/css/app.min.css";
+    // <!-- custom Css-->
+	import "./assets/css/custom.min.css";
 
 // JAVASCRIPT
 import "./assets/libs/bootstrap/js/bootstrap.bundle.min.js";
@@ -25,8 +30,10 @@ import "./assets/js/plugins.js";
 // import "./assets/js/pages/particles.app.js";
 import "./assets/js/pages/password-addon.init.js";
 
-createRoot(document.getElementById("root")).render(
-	<StrictMode>
-		<App />
-	</StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<React.StrictMode>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</React.StrictMode>
 );

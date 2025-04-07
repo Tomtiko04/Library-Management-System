@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "./useAuth";
 import { toast } from "react-hot-toast";
-import axiosClient from "../../utils/axios";
+import axiosInstance from '../../utils/axiosInstance';
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import Logo from "../../UI/Logo";
 import Footer from "../../UI/Footer";
@@ -112,7 +112,7 @@ const SignUp = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await axiosClient.post('/auth/register', {
+			const response = await axiosInstance.post('/auth/register', {
 				name: formData.name,
 				email: formData.email,
 				password: formData.password,
@@ -153,7 +153,7 @@ const SignUp = () => {
 	};
 
 	return (
-		<div className="auth-page-wrapper pt-5">
+		<div className="auth-page-wrapper pt-">
 			{/* auth page bg */}
 			<div className="auth-one-bg-position auth-one-bg">
 				<div className="bg-overlay">

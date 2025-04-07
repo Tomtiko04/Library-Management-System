@@ -4,45 +4,43 @@ import Header from "./Header";
 // import { Menu, X, Home, BarChart3, Settings } from "lucide-react";
 
 export default function DashboardLayout() {
-	const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-	return (
-		
-		<div>
-			
-		<Sidebar/>
-        <Header/>
-		<div class="main-content">
+  return (
+    <div>
+      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />
+      <Header isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />
+      <div class="main-content">
+        <div class="page-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                  <h4 class="mb-sm-0">Dashboard</h4>
 
-            <div class="page-content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Project List</h4>
+                  {/* <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                      <li class="breadcrumb-item">
+                        <a href="">Projects</a>
+                      </li>
+                      <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                  </div> */}
+                </div>
+              </div>
+            </div>
 
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="">Projects</a></li>
-                                        <li class="breadcrumb-item active">Project List</li>
-                                    </ol>
-                                </div>
+            <div class="row g-4 mb-3">
+              <div class="col-sm-auto">
+                <div>
+                  <a href="apps-projects-create.html" class="btn btn-success">
+                    <i class="ri-add-line align-bottom me-1"></i> Add New
+                  </a>
+                </div>
+              </div>
+            </div>
 
-                            </div>
-                        </div>
-                    </div>
-                   
-
-                    <div class="row g-4 mb-3">
-                        <div class="col-sm-auto">
-                            <div>
-                                <a href="apps-projects-create.html" class="btn btn-success"><i class="ri-add-line align-bottom me-1"></i> Add New</a>
-                            </div>
-                        </div>
-                        
-                    </div>
-
-                    {/* <div class="row">
+            {/* <div class="row">
                         <div class="col-xxl-3 col-sm-6 project-card">
                             <div class="card card-height-100">
                                 <div class="card-body">
@@ -109,17 +107,11 @@ export default function DashboardLayout() {
                            
                         </div>
                     </div> */}
-
-                </div>
-              
-            </div>
-
-            
+          </div>
         </div>
-	
-		</div>
-
-	);
+      </div>
+    </div>
+  );
 }
 
 // function NavItem({ icon: Icon, label, isOpen }) {

@@ -189,7 +189,7 @@
 
 
 .nav-item{
-  padding-top: 10px !important;
+  /* padding-top: 10px !important; */
 }
  
   .nav-item .nav-link {
@@ -225,9 +225,9 @@
     100% { opacity: 1; }
 }
 /* Default icon color */
-.nav-icon path {
+/* .nav-icon path {
   
-}
+} */
 
 /* Change SVG icon color when the nav-link is active */
 .nav-item.active .nav-icon path {
@@ -286,9 +286,9 @@
   overflow: hidden;
   transition: transform 0.3s ease-in-out;
 }
-.login-sidebar{
+/* .login-sidebar{
   
-}
+} */
 
 .sidebar-image-container {
   display: flex;
@@ -312,7 +312,7 @@
     display: block;
   }
 
-  .app-menu.navbar-menu {
+  /* .app-menu.navbar-menu {
     position: fixed;
     top: 0;
     left: -250px; 
@@ -324,7 +324,7 @@
 
   .app-menu.navbar-menu.open {
     left: 0;
-  }
+  } */
 
   .sidebar-content {
     display: none; /* Hidden by default */
@@ -357,19 +357,19 @@
 
 /* Sidebar and responsive styles */
 @media (max-width: 768px) {
-  .app-menu.navbar-menu {
+  /* .app-menu.navbar-menu {
     position: fixed;
     top: 0;
-    left: -250px; /* Sidebar initially off-screen */
+    left: -250px; 
     width: 250px;
     height: 100%;
-    background-color: #333; /* Adjust as needed */
+    background-color: #333;
     transition: all 0.3s ease-in-out;
   }
 
   .app-menu.navbar-menu.open {
-    left: 0; /* Sidebar slides in when open */
-  }
+    left: 0;
+  } */
 
   .sidebar-content {
     display: none; /* Hidden by default */
@@ -436,7 +436,7 @@
 }
 
 /* Sidebar container styles */
-.navbar-menu {
+/* .navbar-menu {
     width: 250px;
     position: fixed;
     top: 0;
@@ -444,18 +444,18 @@
     bottom: 0;
     padding: 0;
     transition: all 0.3s ease;
-}
+} */
 
 /* Navbar brand box styles */
-.navbar-brand-box {
+/* .navbar-brand-box {
     padding: 0 1.3rem;
-    height: 50px; /* Reduced from 70px */
+    height: 50px; 
     width: 250px;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1;
-}
+} */
 
 /* Content container styles */
 .container-fluid {
@@ -470,14 +470,14 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-    .navbar-menu {
+    /* .navbar-menu {
         width: 100%;
         transform: translateX(-100%);
     }
 
     .navbar-menu.open {
         transform: translateX(0);
-    }
+    } */
 
     #scrollbar {
         height: calc(100vh - 60px); /* Slightly smaller for mobile */

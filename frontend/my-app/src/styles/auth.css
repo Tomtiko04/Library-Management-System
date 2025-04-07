@@ -39,6 +39,7 @@
 
 /* Add this to ensure content appears above particles */
 .auth-page-content {
-    position: relative;
+    position: absolute !important;
+    top: 0px !important;
     z-index: 3;
 }
