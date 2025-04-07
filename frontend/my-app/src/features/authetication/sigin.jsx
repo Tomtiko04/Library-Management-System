@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axios";
+// import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-hot-toast";
 import ParticlesBackground from "../../UI/ParticlesBackground";
-import "../../styles/Particles.css";
-import "../../styles/auth.css";
+import Logo from "../../UI/Logo";
+import Footer from "../../UI/Footer";
 
 const SignIn = () => {
 	const [email, setEmail] = useState("");
@@ -122,15 +123,7 @@ const SignIn = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col-lg-12">
-							<div className="text-center mt-sm-5 mb-4 text-white-50">
-								<div className="">
-									<Link to="/" className="d-flex justify-content-center auth-logo">
-										<img src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png" alt="" />
-										<h1 style={{ color: 'white' }}>TASUED</h1>
-									</Link>
-								</div>
-								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
-							</div>
+							<Logo />
 						</div>
 					</div>
 
@@ -150,7 +143,7 @@ const SignIn = () => {
 												</label>
 												<input
 													type="email"
-													className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+													className={`form-control ${errors.email ? "is-invalid" : ""}`}
 													id="email"
 													placeholder="Enter email"
 													value={email}
@@ -161,16 +154,12 @@ const SignIn = () => {
 														}
 													}}
 												/>
-												{errors.email && (
-													<div className="invalid-feedback">
-														{errors.email}
-													</div>
-												)}
+												{errors.email && <div className="invalid-feedback">{errors.email}</div>}
 											</div>
 
 											<div className="mb-3">
 												<div className="float-end">
-													<Link to="/auth/pass-reset" className="text-muted">
+													<Link to="/auth/reset/password" className="text-muted">
 														Forgot password?
 													</Link>
 												</div>
@@ -180,7 +169,7 @@ const SignIn = () => {
 												<div className="position-relative auth-pass-inputgroup mb-3">
 													<input
 														type={showPassword ? "text" : "password"}
-														className={`form-control pe-5 ${errors.password ? 'is-invalid' : ''}`}
+														className={`form-control pe-5 ${errors.password ? "is-invalid" : ""}`}
 														placeholder="Enter password"
 														id="password-input"
 														value={password}
@@ -202,9 +191,7 @@ const SignIn = () => {
 														)}
 													</button>
 													{errors.password && (
-														<div className="invalid-feedback">
-															{errors.password}
-														</div>
+														<div className="invalid-feedback">{errors.password}</div>
 													)}
 												</div>
 											</div>
@@ -224,8 +211,7 @@ const SignIn = () => {
 												<button
 													className="btn btn-success w-100"
 													type="submit"
-													disabled={isLoading}
-												>
+													disabled={isLoading}>
 													{isLoading ? "Signing In..." : "Sign In"}
 												</button>
 											</div>
@@ -235,7 +221,7 @@ const SignIn = () => {
 													<p className="mb-0">
 														Don't have an account ?{" "}
 														<Link
-															to="/auth/sign-up"
+															to="/auth/signup"
 															className="fw-semibold text-primary text-decoration-underline">
 															{" "}
 															Signup{" "}
@@ -253,20 +239,7 @@ const SignIn = () => {
 			</div>
 
 			{/* footer */}
-			<footer className="footer">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-12">
-							<div className="text-center">
-								<p className="mb-0 text-muted">
-									&copy; {new Date().getFullYear()} Group 1. Crafted with{" "}
-									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaa, no be only you jorr.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</footer>
+			<Footer />
 		</div>
 	);
 };

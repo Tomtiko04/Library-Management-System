@@ -9,6 +9,8 @@ import SignUp from "./features/authetication/signup";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/DashboardLayout";
 import BrowseBooks from "./components/books/Browsebooks";
+import ForgottenPassword from "./features/authetication/forgottenPassword";
+import CreateNewPassword from "./features/authetication/createNewPassword";
 
 const queryClient = new QueryClient({
 	queryCache: new QueryCache({
@@ -42,8 +44,10 @@ function App() {
 				<ReactQueryDevtools initialIsOpen={false} />
 				<BrowserRouter>
 					<Routes>
-						<Route path="auth/sign-in" element={<SignIn />} />
-						<Route path="auth/sign-up" element={<SignUp />}/>
+						<Route path="auth/signin" element={<SignIn />} />
+						<Route path="auth/signup" element={<SignUp />}/>
+						<Route path="auth/reset/password" element={<ForgottenPassword />}/>
+						<Route path="auth/reset/newpassword" element={<CreateNewPassword />}/>
 						<Route path="component/sidebar" element={<Sidebar />}/>
 						<Route path="component/dashboard" element={<Dashboard />}/>
 						<Route path="component/browsebooks" element={<BrowseBooks />}/>

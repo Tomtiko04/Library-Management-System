@@ -2,6 +2,7 @@ const BorrowedBook = require("../models/borrowedBookModel");
 const Book = require("../models/bookModel");
 const User = require("../models/userModel");
 const Fine = require("../models/fineModel");
+const { notifyNextUser } = require("../controllers/notificationController");
 
 // Borrow a Book
 exports.borrowBook = async (req, res) => {
@@ -222,6 +223,8 @@ exports.returnBook = async (req, res) => {
 		borrowedBook.status = "returned";
 		await borrowedBook.save();
 		await user.save();
+
+		await notifyNextUser(returnedBook._id);
 
 		res.status(200).json({
 			message: "Book returned successfully",

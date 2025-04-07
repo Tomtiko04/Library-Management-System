@@ -4,7 +4,7 @@ import Header from "../Header";
 import axiosClient from "../../../src/utils/axios";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { RiEyeLine, RiDeleteBin6Line } from "react-icons/ri";
+// import { RiEyeLine, RiDeleteBin6Line } from "react-icons/ri";
 // import { Menu, X, Home, BarChart3, Settings } from "lucide-react";
 
 export default function BrowseBooks() {
