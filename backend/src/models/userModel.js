@@ -56,9 +56,10 @@ const UserSchema = new mongoose.Schema(
 				return 0; // Librarians/Admins don't borrow books
 			},
 		},
-		
 		isVerified: { type: Boolean, default: false },
 		verificationToken: { type: String },
+		resetPasswordToken: { type: String },
+		resetPasswordExpires: { type: Date },
 		fines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fine" }],
 		borrowedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "BorrowedBook" }],
 		borrowingHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "BorrowedBook" }],

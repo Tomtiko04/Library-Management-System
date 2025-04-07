@@ -254,3 +254,91 @@ exports.resendVerificationEmail = async (req, res) => {
 		res.status(500).json({ message: "Server Error", error: error.message });
 	}
 };
+
+// Forgot Password
+exports.forgotPassword = async (req, res) => {
+	try {
+		const { email } = req.body;
+
+		// Find user by email
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		// Generate reset token
+		const resetToken = crypto.randomBytes(32).toString('hex');
+		user.resetPasswordToken = crypto
+			.createHash('sha256')
+			.update(resetToken)
+			.digest('hex');
+		user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+		await user.save();
+
+		// Create reset URL - use the unhashed token in the URL
+		const resetURL = `${req.protocol}://${req.get('host')}/api/v1/auth/reset-password/${resetToken}`;
+
+		// Send reset email
+		await sendEmail({
+			to: email,
+			subject: 'Password Reset Request - Library Management System',
+			text: `Dear ${user.name},\n\nYou have requested to reset your password. Please click the link below to reset it:\n\n${resetURL}\n\nThis link will expire in 10 minutes.\n\nIf you did not request this password reset, please ignore this email.\n\nBest regards,\nLibrary Management Team`
+		});
+
+		res.status(200).json({
+			message: "Password reset email sent",
+			info: "Please check your email for password reset instructions."
+		});
+	} catch (error) {
+		res.status(500).json({ message: "Server Error", error: error.message });
+	}
+};
+
+// Reset Password
+exports.resetPassword = async (req, res) => {
+	try {
+		const { token, password } = req.body;
+
+		// Hash token to match stored hash
+		const resetPasswordToken = crypto
+			.createHash('sha256')
+			.update(token)
+			.digest('hex');
+
+		// Find user with valid reset token
+		const user = await User.findOne({
+			resetPasswordToken,
+			resetPasswordExpires: { $gt: Date.now() }
+		});
+
+		if (!user) {
+			return res.status(400).json({
+				message: "Invalid or expired reset token",
+				info: "Please request a new password reset link."
+			});
+		}
+
+		// Hash new password
+		const hashedPassword = await bcrypt.hash(password, 10);
+		user.password = hashedPassword;
+		user.resetPasswordToken = undefined;
+		user.resetPasswordExpires = undefined;
+
+		await user.save();
+
+		// Send confirmation email
+		await sendEmail({
+			to: user.email,
+			subject: 'Password Reset Successful - Library Management System',
+			text: `Dear ${user.name},\n\nYour password has been successfully reset. You can now log in with your new password.\n\nIf you did not perform this action, please contact support immediately.\n\nBest regards,\nLibrary Management Team`
+		});
+
+		res.status(200).json({
+			message: "Password reset successful",
+			info: "You can now log in with your new password."
+		});
+	} catch (error) {
+		res.status(500).json({ message: "Server Error", error: error.message });
+	}
+};
