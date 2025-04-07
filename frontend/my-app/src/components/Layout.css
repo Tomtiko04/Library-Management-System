@@ -1,5 +1,5 @@
 /* Add your layout specific styles here */
-.navbar-menu {
+/* .navbar-menu {
     width: 250px;
     z-index: 1002;
     background: var(--vz-vertical-menu-bg);
@@ -13,6 +13,6 @@
 
 .navbar-menu-hide {
     transform: translateX(-100%);
-}
+} */
 
 /* Add more styles as needed */
