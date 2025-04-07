@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 
 exports.auth = async (req, res, next) => {
 	try {
-		const authHeader = req."Authorization");
+		const authHeader = req.header("Authorization");
 		// console.log("🔍 Raw Authorization Header:", authHeader); // ✅ Check if header exists
 
 		if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -32,22 +32,20 @@ exports.auth = async (req, res, next) => {
 
 // ✅ Middleware to check user roles
 exports.authorize = (roles) => {
-  return (req, res, next) => {
-    // console.log("🔍 User in Middleware:", req.user); // ✅ Debugging: Ensure req.user exists
+	return (req, res, next) => {
+		// console.log("🔍 User in Middleware:", req.user); // ✅ Debugging: Ensure req.user exists
 
-    if (!req.user || !roles.includes(req.user.role)) {
-      return res.status(403).json({ message: "Access denied" });
-    }
+		if (!req.user || !roles.includes(req.user.role)) {
+			return res.status(403).json({ message: "Access denied" });
+		}
 
-    next();
-  };
+		next();
+	};
 };
-
-
 
 ////////////////////////////////////////////////////////////////////////////
 // exports.auth = (req, res, next) => {
-// 	let token = req."Authorization");
+// 	let token = req.header("Authorization");
 
 // 	if (!token) {
 // 		return res.status(401).json({ message: "No token, authorization denied" });
