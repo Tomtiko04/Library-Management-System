@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "./useAuth";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import axiosInstance from '../../utils/axiosInstance';
 import ParticlesBackground from "../../UI/ParticlesBackground";
-import "../../styles/Particles.css";
-import "../../styles/auth.css";
+import Logo from "../../UI/Logo";
+import Footer from "../../UI/Footer";
 
 const SignUp = () => {
 	const navigate = useNavigate();
@@ -176,19 +175,7 @@ const SignUp = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col-lg-12">
-							<div className="text-center mt-sm-5 mb-4 text-white-50">
-								<div>
-									<Link to="/" className="d-flex justify-content-center auth-logo">
-										<img
-											src="https://my.tasued.edu.ng/assets/media/school_logo/tasued-logo.png"
-											alt=""
-											height="20"
-										/>
-										<h1 style={{ color: "white" }}>TASUED</h1>
-									</Link>
-								</div>
-								<p className="mt-3 fs-15 fw-medium">Tai Solarin University of Education Library</p>
-							</div>
+							<Logo />
 						</div>
 					</div>
 
@@ -246,8 +233,9 @@ const SignUp = () => {
 													<option value="faculty">Faculty</option>
 													<option value="nonTeachingStaff">Non-Teaching Staff</option>
 													<option value="researcher">Researcher</option>
-													<option value="librarian">Librarian</option>
-													<option value="admin">Admin</option>
+													{/* TODO: Create a new signup page for them */}
+													{/* <option value="librarian">Librarian</option>
+													<option value="admin">Admin</option> */}
 												</select>
 											</div>
 
@@ -386,7 +374,7 @@ const SignUp = () => {
 												<p className="mb-0">
 													Already have an account ?
 													<Link
-														to="/auth/sign-in"
+														to="/auth/signin"
 														className="fw-semibold text-primary text-decoration-underline">
 														{" "}
 														Signin{" "}
@@ -403,21 +391,7 @@ const SignUp = () => {
 			</div>
 
 			{/* footer */}
-			<footer className="footer">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-12">
-							<div className="text-center">
-								<p className="mb-0 text-muted">
-									&copy; {new Date().getFullYear()} Group 1. Crafted with{" "}
-									<i className="mdi mdi-heart text-danger"></i> by Tomtiko dev blaaaaa, no be only
-									you jorr.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</footer>
+			<Footer />
 		</div>
 	);
 };

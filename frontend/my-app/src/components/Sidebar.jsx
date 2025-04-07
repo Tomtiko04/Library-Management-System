@@ -49,14 +49,14 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
         {/* <!-- LOGO --> */}
         <div className="navbar-brand-box">
           {/* <!-- Dark Logo--> */}
-          <a href="index.html" className="logo logo-dark">
+          <Link to={"/dashboard"} className="logo logo-dark">
             <span className="logo-sm">
               <img src={images.logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
               <img src={images.logoLight} alt="" height="17" />
             </span>
-          </a>
+          </Link>
           {/* <!-- Light Logo--> */}
           <a href="index.html" className="logo logo-light">
             <span className="logo-sm">
@@ -170,6 +170,17 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
                   <i className="ri-notification-3-line"></i> Notifications
                 </Link>
               </li>
+                        {/* Admin/Librarian-specific menu items outside Books dropdown */}
+                        {(isAdmin || isLibrarian) && (
+                            <li className="nav-item">
+                                <Link to="/manage-users" className="nav-link">
+                                    <i className="ri-user-settings-line me-2"></i>
+                                    <span>Manage Users</span>
+                                </Link>
+                            </li>
+                        )}
+
+                        {/* TODO Setting for all users */}
 
               {/* Settings - All Users */}
               <li className="nav-item">
