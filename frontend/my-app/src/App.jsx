@@ -67,11 +67,12 @@ function App() {
 				<QueryClientProvider client={queryClient}>
 					<ReactQueryDevtools initialIsOpen={false} />
 					<Routes>
-						<Route path="auth/sign-in" element={<SignIn />} />
-						<Route path="auth/sign-up" element={<SignUp />} />
+						<Route path="auth/signin" element={<SignIn />} />
+						<Route path="auth/signup" element={<SignUp />} />
 						<Route path="auth/reset/password" element={<ForgottenPassword />} />
 						<Route path="auth/reset/newpassword" element={<CreateNewPassword />} />
 						{/* <Route path="/sidebar" element={<Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />} /> */}
+						<Route index element={<Dashboard />} />
 						<Route path="/dashboard" element={<Dashboard />} />
 						{/* <Route path="component/browsebooks" element={<BrowseBooks />}/> */}
 						<Route path="/books" element={<BrowseBooks />} />

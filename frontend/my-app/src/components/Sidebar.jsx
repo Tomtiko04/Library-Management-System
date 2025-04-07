@@ -49,14 +49,14 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
         {/* <!-- LOGO --> */}
         <div className="navbar-brand-box">
           {/* <!-- Dark Logo--> */}
-          <a href="index.html" className="logo logo-dark">
+          <Link to={"/dashboard"} className="logo logo-dark">
             <span className="logo-sm">
               <img src={images.logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
               <img src={images.logoLight} alt="" height="17" />
             </span>
-          </a>
+          </Link>
           {/* <!-- Light Logo--> */}
           <a href="index.html" className="logo logo-light">
             <span className="logo-sm">
