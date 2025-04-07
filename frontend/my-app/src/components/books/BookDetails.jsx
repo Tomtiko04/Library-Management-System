@@ -40,11 +40,11 @@ const BookDetails = () => {
       <Header isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />
       <main className="main-content pt-5">
         {loading ? (
-          <div>Loading...</div>
+          <div className="loading_box">Loading...</div>
         ) : (
           <>
             {!book ? (
-              <div>Book not found</div>
+              <div className="loading_box">Book not found</div>
             ) : (
               <div className="container mx-auto mt-5">
                 {/* Header Section */}
