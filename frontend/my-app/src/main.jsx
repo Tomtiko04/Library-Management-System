@@ -7,12 +7,15 @@ import App from "./App.jsx";
 // <!-- Layout config Js -->
 import "./assets/js/layout.js";
 
-// <!-- App Css-->
-import "./assets/css/app.min.css";
+    // <!-- Bootstrap Css -->
+	import "./assets/css/bootstrap.min.css";
+    // <!-- Icons Css -->
+	// import "./assets/css/icons.min.css";
 
-// <!-- Bootstrap Css -->
-import "./assets/css/bootstrap.min.css";
-import "./assets/css/styles.css";
+    // <!-- App Css-->
+	import "./assets/css/app.min.css";
+    // <!-- custom Css-->
+	import "./assets/css/custom.min.css";
 
 // JAVASCRIPT
 import "./assets/libs/bootstrap/js/bootstrap.bundle.min.js";
