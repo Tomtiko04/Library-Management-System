@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "../Sidebar";
 import Header from "../Header";
 import axiosInstance from "../../utils/axiosInstance";
@@ -13,6 +13,28 @@ export default function BrowseBooks() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+          setUserId(user.id);
+          setUserRole(user.role);
+      }
+  }, [userId]);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    author: "",
+    isbn: "",
+    category: "",
+    publishedYear: "",
+    totalCopies: "",
+    availableCopies: "",
+    createdBy: userId ?? '',
+  });
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -53,6 +75,61 @@ export default function BrowseBooks() {
     navigate(`/books/${bookId}`);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Convert specific fields to numbers
+    const formattedData = {
+        ...formData,
+        publishedYear: Number(formData.publishedYear),
+        totalCopies: Number(formData.totalCopies),
+        availableCopies: Number(formData.availableCopies),
+        createdBy: userId,
+    };
+
+    console.log('formData: ', formattedData);
+
+    try {
+        const response = await axiosInstance.post("/books", formattedData);
+        console.log("Book created:", response.data);
+        
+        // Close the modal
+        if (modalRef.current) {
+            const modal = new window.bootstrap.Modal(modalRef.current);
+            modal.hide();
+        }
+
+        // Reset the form
+        // setFormData({
+        //     title: "",
+        //     author: "",
+        //     isbn: "",
+        //     category: "",
+        //     publishedYear: "",
+        //     totalCopies: "",
+        //     availableCopies: "",
+        //     createdBy: userId,
+        // });
+        toast.success("Book created successfully!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+    } catch (error) {
+        console.error("Error creating book:", error);
+        toast.error("Failed to create book.");
+    }
+  };
+
+  const isBorrower = ['underGraduate', 'postGraduate', 'faculty', 'researcher'].includes(userRole);
+  const isAdmin = userRole === 'admin';
+  const isLibrarian = userRole === 'librarian';
+
+
   return (
     <div>
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={setSidebarOpen} />
@@ -77,7 +154,7 @@ export default function BrowseBooks() {
             </div>
 
             {/* Search Bar */}
-            <div className="mb-3">
+            <div className="mb-3 d-flex justify-content-between">
               <input
                 type="text"
                 style={{ width: "320px" }}
@@ -86,6 +163,145 @@ export default function BrowseBooks() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              {(isAdmin || isLibrarian) && (
+              <div className="">
+                <button
+                  type="button"
+                  className="btn btn-primary w-full me-3"
+                  data-bs-toggle="modal"
+                  data-bs-target=".bs-example-modal-center"
+                >
+                  Add New Book
+                </button>
+                <div
+                  className="modal fade bs-example-modal-center"
+                  ref={modalRef}
+                  tabIndex="-1"
+                  role="dialog"
+                  aria-labelledby="mySmallModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                      <div className="modal-header mb-0">
+                        <h4 className="mb-0">Add New Book</h4>
+                      </div>
+                      <div className="modal-body text-left p-4 pt-4">
+                        <form onSubmit={handleSubmit}>
+                          <div className="mb-3">
+                            <label htmlFor="title" className="form-label d-block text-left w-100">
+                              Title
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="title"
+                              name="title"
+                              value={formData.title}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="author" className="form-label d-block text-left w-100">
+                              Author
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="author"
+                              name="author"
+                              value={formData.author}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="isbn" className="form-label d-block text-left w-100">
+                              ISBN
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="isbn"
+                              name="isbn"
+                              value={formData.isbn}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="category" className="form-label d-block text-left w-100">
+                              Category
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="category"
+                              name="category"
+                              value={formData.category}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label
+                              htmlFor="publishedYear"
+                              className="form-label d-block text-left w-100"
+                            >
+                              Published Year
+                            </label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="publishedYear"
+                              name="publishedYear"
+                              value={formData.publishedYear}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="totalCopies" className="form-label d-block text-left w-100">
+                              Total Copies
+                            </label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="totalCopies"
+                              name="totalCopies"
+                              value={formData.totalCopies}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label
+                              htmlFor="availableCopies"
+                              className="form-label d-block text-left w-100"
+                            >
+                              Available Copies
+                            </label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="availableCopies"
+                              name="availableCopies"
+                              value={formData.availableCopies}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <button type="submit" className="btn btn-success">
+                            Create Book
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              )}
             </div>
 
             {/* Loader */}
@@ -120,9 +336,9 @@ export default function BrowseBooks() {
                       filteredBooks.map((book, index) => (
                         <tr
                           key={book._id}
-                          style={{ cursor: "pointer" }}
-                          onClick={() => handleRowClick(book._id)}
-                          className="hover:bg-gray-50 transition-colors"
+                          //   style={{ cursor: "pointer" }}
+                          //   onClick={() => handleRowClick(book._id)}
+                          className="transition-colors"
                         >
                           {/* <td>
 														<div className="form-check">
@@ -164,13 +380,58 @@ export default function BrowseBooks() {
 														>
 															<RiEyeLine />
 														</Link> */}
-                            <button
+                            {/* <button
                               type="button"
                               className="btn btn-sm btn-danger ms-2"
                               onClick={() => handleDelete(book._id)}
                             >
                               <RiDeleteBin6Line />
-                            </button>
+                            </button> */}
+                            <div
+                              className="dropdown header-item topbar-user"
+                              style={{ height: "30px" }}
+                            >
+                              <button
+                                type="button"
+                                className="btn"
+                                id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                <span className="d-flex align-items-center">
+                                  <i className="mdi mdi-dots-vertical text-muted fs-16 align-middle me-1"></i>
+                                </span>
+                              </button>
+                              <div className="dropdown-menu dropdown-menu-end">
+                                {/* <h6 className="dropdown-header">
+                                  Welcome Anna!
+                                </h6>
+                                <div className="dropdown-divider"></div> */}
+                                <Link
+                                  className="dropdown-item"
+                                  to={`/books/${book._id}`}
+                                >
+                                  <i className="mdi mdi-eye text-muted fs-16 align-middle me-1"></i>
+                                  <span className="align-middle">View</span>
+                                </Link>
+                                <Link
+                                  className="dropdown-item"
+                                  to={`/books/${book._id}`}
+                                >
+                                  <i className="mdi mdi-pen text-muted fs-16 align-middle me-1"></i>
+                                  <span className="align-middle">Edit</span>
+                                </Link>
+                                <Link
+                                  className="dropdown-item"
+                                  to={``}
+                                  onClick={() => handleDelete(book._id)}
+                                >
+                                  <i className="mdi mdi-delete text-muted fs-16 align-middle me-1"></i>
+                                  <span className="align-middle">Delete</span>
+                                </Link>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       ))
