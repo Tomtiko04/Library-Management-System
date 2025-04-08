@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: path.resolve(__dirname, "../../config.env") });
 
 const generateToken = (user) => {
 	if (!process.env.JWT_SECRET) {
@@ -299,10 +303,8 @@ exports.verifyEmail = async (req, res) => {
 		await user.save();
 		
 		// Redirect to frontend login page or send success response
-		res.status(200).json({ 
-			message: "Email verification successful", 
-			info: "Your account has been verified. You can now log in."
-		});
+		res.redirect(`${process.env.FRONTEND_URL}/auth/signin`);
+		// res.status(200).json({ message: "Email verified successfully" });
 	} catch (error) {
 		res.status(500).json({ message: "Server Error", error: error.message });
 	}
