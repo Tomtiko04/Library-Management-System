@@ -58,6 +58,8 @@ const SignIn = () => {
 		setIsLoading(true);
 
 		try {
+		e.preventDefault();
+
 			// axiosClient.post('/auth/login', payload)
             //     .then(({ data }) => {
             //         localStorage.setItem('token', data.token);
@@ -66,34 +68,42 @@ const SignIn = () => {
             //         navigate('/component/dashboard');
             //     }
             //     );
-
+	console.log('payload:', payload);
+	
 			const response = await axiosInstance.post('/auth/login', payload);
-			const { token } = response.data;
-			const { user } = response.data;
-			localStorage.setItem('token', token);
-			localStorage.setItem('user', JSON.stringify(user));
-			toast.success("User logged in successfully!");
-			navigate('/dashboard');
+			// const { token } = response.data;
+			// const { user } = response.data;
+			// localStorage.setItem('token', token);
+			// localStorage.setItem('user', JSON.stringify(user));
+			// toast.success("User logged in successfully!");
+			
+			setTimeout(() => {
+				navigate('/dashboard');
+			}, 5000);
+		e.preventDefault();
+
 		} catch (error) {
+		e.preventDefault();
+
 			console.error('Login error:', error);
 
 			if (error.response) {
-				switch (error.response.status) {
-					case 400:
-						toast.error("Invalid email or password");
-						break;
-					case 401:
-						toast.error("Unauthorized access");
-						break;
-					case 404:
-						toast.error("User not found");
-						break;
-					case 500:
-						toast.error("Server error. Please try again later");
-						break;
-					default:
-						toast.error(error.response.data.message || "Login failed");
-				}
+				// switch (error.response.status) {
+				// 	case 400:
+				// 		toast.error("Invalid email or password");
+				// 		break;
+				// 	case 401:
+				// 		toast.error("Unauthorized access");
+				// 		break;
+				// 	case 404:
+				// 		toast.error("User not found");
+				// 		break;
+				// 	case 500:
+				// 		toast.error("Server error. Please try again later");
+				// 		break;
+				// 	default:
+				// 		toast.error(error.response.data.message || "Login failed");
+				// }
 			} else if (error.request) {
 				toast.error("No response from server. Please check your internet connection");
 			} else {
@@ -102,6 +112,7 @@ const SignIn = () => {
 		} finally {
 			setIsLoading(false);
 		}
+		e.preventDefault();
 	};
 
 	return (

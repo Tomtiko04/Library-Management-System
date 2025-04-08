@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import {
   QueryCache,
   QueryClient,
@@ -7,12 +7,12 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import toast, { Toaster } from "react-hot-toast";
 import "./index.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 import SignIn from "./features/authetication/sigin";
-import { useEffect } from "react";
 import SignUp from "./features/authetication/signup";
 import Dashboard from "./components/DashboardLayout";
 import BrowseBooks from "./components/books/Browsebooks";
@@ -44,6 +44,9 @@ const queryClient = new QueryClient({
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [userDetails, setUserDetails] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     // Initialize Waves if it exists
@@ -55,7 +58,18 @@ function App() {
         button.classList.add("waves-effect");
       });
     }
-  }, []);
+
+    // Check authentication status
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserDetails(user);
+    if (user) {
+      // If authenticated, navigate to dashboard
+      navigate("/dashboard");
+    } else {
+      // If not authenticated, navigate to sign-in
+      navigate("/auth/sign-in");
+    }
+  }, [navigate]);
 
   return (
     <div className="app">
@@ -84,6 +98,8 @@ function App() {
             <Route path="/notifications" element={<Notifications />} /> 
             <Route path="/settings" element={<Settings />} /> 
             <Route path="/books/:id" element={<BookDetails />} />
+            {/* Redirect from root to sign-in or dashboard */}
+            <Route path="/" element={<Navigate to={userDetails ? "/dashboard" : "/auth/sign-in"} />} />
           </Routes>
         </QueryClientProvider>
         <Toaster

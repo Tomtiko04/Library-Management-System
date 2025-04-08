@@ -214,7 +214,7 @@ export default function BrowseBooks() {
               />
               <div className="d-flex">
                 <select
-                  className="ml-0 sign__select"
+                  className="ml-0 sign__select form-control"
                   value={selectedCategory}
                   onChange={handleCategoryChange}
                   style={{ minWidth: "130px" }}
@@ -228,7 +228,7 @@ export default function BrowseBooks() {
                 </select>
                 <div className="main__filter-dropdowns d-flex" style={{ gap: "10px", marginLeft: "10px" }}>
                   <select
-                    className="ml-0 sign__select"
+                    className="ml-0 sign__select form-control"
                     value={itemsPerPage}
                     onChange={handleItemsPerPageChange}
                     style={{ minWidth: "80px" }}
@@ -240,7 +240,7 @@ export default function BrowseBooks() {
                   </select>
 
                   <select
-                    className="sign__select me-2"
+                    className="sign__select form-control me-2"
                     value={sortOrder}
                     onChange={handleSortOrderChange}
                     style={{ minWidth: "130px" }}
