@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
+  baseURL: "https://library-management-system-ymj4.onrender.com/api/v1",
 });
 
 // Add a request interceptor to add token to all requests
