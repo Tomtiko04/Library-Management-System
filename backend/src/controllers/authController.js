@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: path.resolve(__dirname, "../../config.env") });
 
 const generateToken = (user) => {
 	if (!process.env.JWT_SECRET) {
@@ -20,6 +24,85 @@ const generateToken = (user) => {
 };
 
 // User Signup
+// exports.register = async (req, res) => {
+// 	const errors = validationResult(req);
+// 	if (!errors.isEmpty()) {
+// 		return res.status(400).json({ errors: errors.array() });
+// 	}
+
+// 	try {
+// 		const { name, email, password, role, libraryId } = req.body;
+
+// 		let user = await User.findOne({ email });
+// 		if (user) return res.status(400).json({ message: "User already exists" });
+
+// 		if (
+// 			(role === "underGraduate" ||
+// 				role === "postGraduate" ||
+// 				role === "faculty" ||
+// 				role === "nonTeachingStaff" ||
+// 				role === "researcher") &&
+// 			!libraryId
+// 		) {
+// 			return res.status(400).json({ message: "Library ID is required" });
+// 		}
+
+// 		// ✅ Ensure unique Library ID only for students
+// 		if (
+// 			role === "underGraduate" ||
+// 			role === "postGraduate" ||
+// 			role === "faculty" ||
+// 			role === "nonTeachingStaff" ||
+// 			role === "researcher"
+// 		) {
+// 			const existingLibraryId = await User.findOne({ libraryId });
+// 			if (existingLibraryId) {
+// 				return res.status(400).json({ message: "Library ID already in use" });
+// 			}
+// 		}
+
+// 		// Generate verification token
+// 		const verificationToken = crypto.randomBytes(32).toString('hex');
+        
+// 		const hashedPassword = await bcrypt.hash(password, 10);
+// 		user = new User({
+// 			name,
+// 			email,
+// 			password: hashedPassword,
+// 			role,
+// 			isVerified: false,
+// 			verificationToken,
+// 			libraryId:
+// 				role === "underGraduate" ||
+// 				role === "postGraduate" ||
+// 				role === "faculty" ||
+// 				role === "nonTeachingStaff" ||
+// 				role === "researcher"
+// 					? libraryId
+// 					: null,
+// 		});
+
+// 		await user.save();
+
+// 		// Create verification URL
+// 		const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/${verificationToken}`;
+
+// 		// Send verification email
+// 		await sendEmail({
+// 			to: email,
+// 			subject: 'Verify Your Email - Library Management System',
+// 			text: `Dear ${name},\n\nWelcome to our Library Management System! Your account has been created and requires email verification.\n\nPlease click the link below to verify your email address:\n${verificationURL}\n\nThis link will expire in 24 hours.\n\nYour login details:\nEmail: ${email}\nRole: ${role}\n${libraryId ? `Library ID: ${libraryId}\n` : ''}\n\nBest regards,\nLibrary Management Team`
+// 		});
+
+// 		res.status(201).json({ 
+// 			message: "User registered successfully", 
+// 			info: "A verification email has been sent to your email address. Please verify your email to activate your account."
+// 		});
+// 	} catch (error) {
+// 		res.status(500).json({ message: error.message });
+// 	}
+// };
+
 exports.register = async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -43,7 +126,7 @@ exports.register = async (req, res) => {
 			return res.status(400).json({ message: "Library ID is required" });
 		}
 
-		// ✅ Ensure unique Library ID only for students
+		// ✅ Ensure unique Library ID only for students/staff
 		if (
 			role === "underGraduate" ||
 			role === "postGraduate" ||
@@ -58,9 +141,10 @@ exports.register = async (req, res) => {
 		}
 
 		// Generate verification token
-		const verificationToken = crypto.randomBytes(32).toString('hex');
-        
+		const verificationToken = crypto.randomBytes(32).toString("hex");
 		const hashedPassword = await bcrypt.hash(password, 10);
+
+		// Create new user
 		user = new User({
 			name,
 			email,
@@ -80,22 +164,33 @@ exports.register = async (req, res) => {
 
 		await user.save();
 
-		// Create verification URL
-		const verificationURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/${verificationToken}`;
+		// ✅ Try to send email separately
+		try {
+			const verificationURL = `${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${verificationToken}`;
 
-		// Send verification email
-		await sendEmail({
-			to: email,
-			subject: 'Verify Your Email - Library Management System',
-			text: `Dear ${name},\n\nWelcome to our Library Management System! Your account has been created and requires email verification.\n\nPlease click the link below to verify your email address:\n${verificationURL}\n\nThis link will expire in 24 hours.\n\nYour login details:\nEmail: ${email}\nRole: ${role}\n${libraryId ? `Library ID: ${libraryId}\n` : ''}\n\nBest regards,\nLibrary Management Team`
-		});
+			await sendEmail({
+				to: email,
+				subject: "Verify Your Email - Library Management System",
+				text: `Dear ${name},\n\nWelcome to our Library Management System! Your account has been created and requires email verification.\n\nPlease click the link below to verify your email address:\n${verificationURL}\n\nThis link will expire in 24 hours.\n\nYour login details:\nEmail: ${email}\nRole: ${role}\n${libraryId ? `Library ID: ${libraryId}\n` : ""}\n\nBest regards,\nLibrary Management Team`,
+			});
 
-		res.status(201).json({ 
-			message: "User registered successfully", 
-			info: "A verification email has been sent to your email address. Please verify your email to activate your account."
-		});
+			return res.status(201).json({
+				message: "User registered successfully",
+				info: "A verification email has been sent to your email address. Please verify your email to activate your account.",
+			});
+		} catch (emailError) {
+			console.error("Email sending failed:", emailError);
+			return res.status(201).json({
+				message: "User registered, but email failed to send.",
+				info: "Please contact the admin or request a new verification email.",
+				error: emailError.message,
+			});
+		}
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		console.error("Registration failed:", error);
+		res
+			.status(500)
+			.json({ message: "An error occurred during registration.", error: error.message });
 	}
 };
 
@@ -208,10 +303,8 @@ exports.verifyEmail = async (req, res) => {
 		await user.save();
 		
 		// Redirect to frontend login page or send success response
-		res.status(200).json({ 
-			message: "Email verification successful", 
-			info: "Your account has been verified. You can now log in."
-		});
+		res.redirect(`${process.env.FRONTEND_URL}/auth/signin`);
+		// res.status(200).json({ message: "Email verified successfully" });
 	} catch (error) {
 		res.status(500).json({ message: "Server Error", error: error.message });
 	}
