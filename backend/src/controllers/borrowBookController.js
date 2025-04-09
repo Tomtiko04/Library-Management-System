@@ -96,12 +96,30 @@ exports.getAllBorrowedBooks = async (req, res) => {
 };
 
 // ✅ Get User Borrowing History
+// exports.getUserBorrowingHistory = async (req, res) => {
+// 	try {
+// 		const user = await User.findById(req.user.id).populate("borrowingHistory");
+
+// 		res.status(200).json({ borrowingHistory: user.borrowingHistory });
+// 	} catch (error) {
+// 		res.status(500).json({ message: "Server error" });
+// 	}
+// };
+
 exports.getUserBorrowingHistory = async (req, res) => {
 	try {
-		const user = await User.findById(req.user.id).populate("borrowingHistory");
+		const user = await User.findById(req.user.id).populate({
+			path: "borrowingHistory",
+			populate: {
+				path: "book",
+				model: "Book",
+				select: "title",
+			},
+		});
 
 		res.status(200).json({ borrowingHistory: user.borrowingHistory });
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({ message: "Server error" });
 	}
 };

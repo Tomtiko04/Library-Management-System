@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
             // Handle 401 Unauthorized
             if (error.response.status === 401) {
                 localStorage.removeItem('token');
-                window.location.href = '/login';
+                window.location.href = '/auth/signin';
             }
             
             // Handle 403 Forbidden

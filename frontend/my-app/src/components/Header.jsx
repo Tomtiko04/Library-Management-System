@@ -599,10 +599,10 @@ export default function Header({ isSidebarOpen, toggleSidebar }) {
                     Welcome {userDetails.name}!
                   </h6>
                   <div className="dropdown-divider"></div>
-                  <a className="dropdown-item" href="pages-profile.html">
+                  <Link className="dropdown-item" to="/user-profile">
                     <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
                     <span className="align-middle">Profile</span>
-                  </a>
+                  </Link>
                   <Link className="dropdown-item" to="/settings">
                     <span className="badge bg-soft-success text-success mt-1 float-end">
                       New
