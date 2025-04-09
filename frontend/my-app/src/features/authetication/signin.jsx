@@ -71,42 +71,50 @@ const SignIn = () => {
       //     }
       //     );
 
-	  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
-    //   const response = await axiosInstance.post("/auth/login", payload);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      //   const response = await axiosInstance.post("/auth/login", payload);
       const data = await response.json();
-	  
-	  if (response.ok) {
-		  const { token, user } = response.data;
-	
-		  // Set token and user in local storage
-		  localStorage.setItem("token", token);
-		  localStorage.setItem("user", JSON.stringify(user));
-	
-		  toast.success("User logged in successfully!");
-	
-		  // Navigate to dashboard immediately after setting local storage
-		  navigate("/dashboard");
-		
-	  } else {
-		toast.error(data.info || 'Login failed. Please try again.');
-	  }
+
+      if (response.ok) {
+        const { token, user } = data;
+
+        // Set token and user in local storage
+        localStorage.setItem("token", token);
+
+        localStorage.setItem("user", JSON.stringify(user));
+
+        toast.success("Login successful!");
+
+        setTimeout(() => {
+          // Navigate to dashboard immediately after setting local storage
+          navigate("/dashboard");
+        }, 1000);
+      } else {
+        if (data.message && data.info) {
+          toast.error(`${data.message} ${data.info}`);
+        } else {
+          toast.error(`${data.message}`);
+        }
+      }
     } catch (error) {
       e.preventDefault();
 
       console.error("Login error:", error);
 
       if (error.response) {
-
         switch (error.response.status) {
           case 400:
             toast.error("Invalid email or password");

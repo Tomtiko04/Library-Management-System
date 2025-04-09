@@ -128,9 +128,16 @@ const SignUp = () => {
 
       const data = await response.json();
 
-      if (data.status) {
-        toast.success("Registration successful!");
-        navigate("/auth/signin");
+      if (data.message === "User registered successfully") {
+        // toast.success("Registration successful!");
+
+        toast.success(
+          data.info ? data.info : data.message || "Registration successful!"
+        );
+
+        setTimeout(() => {
+          navigate("/auth/signin");
+        }, 2000);
       } else {
         toast.error(
           data.info

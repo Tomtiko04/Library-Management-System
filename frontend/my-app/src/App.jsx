@@ -12,7 +12,7 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { useNavigate } from "react-router-dom";
 
-import SignIn from "./features/authetication/sigin";
+import SignIn from "./features/authetication/signin";
 import SignUp from "./features/authetication/signup";
 import Dashboard from "./components/DashboardLayout";
 import BrowseBooks from "./components/books/Browsebooks";
@@ -29,6 +29,7 @@ import FinesPayments from "./components/books/FinesPayments";
 import ManageUsers from "./components/books/ManageUsers";
 import Notifications from "./components/books/Notifications";
 import Settings from "./components/books/Settings";
+import UserProfile from "./components/books/UserProfile";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -64,14 +65,19 @@ function App() {
     // Check authentication status
     const user = JSON.parse(localStorage.getItem("user"));
     setUserDetails(user);
-    if (user) {
-      // If authenticated, navigate to dashboard
-      navigate("/dashboard");
-    } else {
-      // If not authenticated, navigate to signin
-      navigate("/auth/signin");
-    }
+    
+    setTimeout(() => {
+      if (user && !window.location.pathname.includes('/auth/signin')) {
+        navigate(`${window.location.pathname}`);
+      } else if (user && window.location.pathname.includes('/auth/signin')) {
+        navigate("/dashboard");
+      } else {
+        // If not authenticated, navigate to signin
+        navigate("/auth/signin");
+      }
+    }, 1000);
   }, []);
+
 
   return (
 		<div className="app">
@@ -100,6 +106,7 @@ function App() {
 						<Route path="/manage-users" element={<ManageUsers />} />
 						<Route path="/notifications" element={<Notifications />} />
 						<Route path="/settings" element={<Settings />} />
+						<Route path="/user-profile" element={<UserProfile />} />
 						<Route path="/books/:id" element={<BookDetails />} />
             <Route path="/" element={<Navigate to={userDetails ? "/dashboard" : "/auth/signin"} />} />
 					</Routes>

@@ -21,6 +21,7 @@ export default function BrowseBooks() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [sortOrder, setSortOrder] = useState("asc");
   const [isLoading, setIsLoading] = useState(false);
+  const [BookID, setBookID] = useState(null);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -58,7 +59,7 @@ export default function BrowseBooks() {
   }, []);
 
   const uniqueCategories = useMemo(() => {
-    const categories = books.map(book => book.category);
+    const categories = books.map((book) => book.category);
     return [...new Set(categories)];
   }, [books]);
 
@@ -67,7 +68,9 @@ export default function BrowseBooks() {
       const matchesSearchTerm = Object.values(item).some((value) =>
         String(value).toLowerCase().includes(searchTerm.toLowerCase())
       );
-      const matchesCategory = selectedCategory ? item.category === selectedCategory : true;
+      const matchesCategory = selectedCategory
+        ? item.category === selectedCategory
+        : true;
       return matchesSearchTerm && matchesCategory;
     });
   }, [searchTerm, selectedCategory, books]);
@@ -115,17 +118,24 @@ export default function BrowseBooks() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this book?")) {
-      try {
-        await axiosInstance.delete(`/books/${id}`);
-        setBooks(books.filter((book) => book._id !== id));
-        toast.success("Book deleted successfully!");
-      } catch (error) {
-        console.error("Error deleting book:", error);
-        toast.error("Failed to delete book.");
-      }
-    }
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    
+    await axiosInstance.delete(`/books/${id}`);
+    setBooks(books.filter((book) => book._id !== id));
+    toast.success("Book deleted successfully!");
+
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1000);
+    
+    // if (window.confirm("Are you sure you want to delete this book?")) {
+    //   try {
+    //   } catch (error) {
+    //     console.error("Error deleting book:", error);
+    //     toast.error("Failed to delete book.");
+    //   }
+    // }
   };
 
   const handleRowClick = (bookId) => {
@@ -175,6 +185,7 @@ export default function BrowseBooks() {
     "underGraduate",
     "postGraduate",
     "faculty",
+    "nonTeachingStaff",
     "researcher",
   ].includes(userRole);
   const isAdmin = userRole === "admin";
@@ -226,7 +237,10 @@ export default function BrowseBooks() {
                     </option>
                   ))}
                 </select>
-                <div className="main__filter-dropdowns d-flex" style={{ gap: "10px", marginLeft: "10px" }}>
+                <div
+                  className="main__filter-dropdowns d-flex"
+                  style={{ gap: "10px", marginLeft: "10px" }}
+                >
                   <select
                     className="ml-0 sign__select form-control"
                     value={itemsPerPage}
@@ -433,10 +447,7 @@ export default function BrowseBooks() {
                   <tbody>
                     {currentData.length > 0 ? (
                       currentData.map((book, index) => (
-                        <tr
-                          key={book._id}
-                          className="transition-colors"
-                        >
+                        <tr key={book._id} className="transition-colors">
                           <td>{index + 1}</td>
                           <td>
                             <Link
@@ -477,7 +488,10 @@ export default function BrowseBooks() {
                                   <i className="mdi mdi-dots-vertical text-muted fs-16 align-middle me-1"></i>
                                 </span>
                               </button>
-                              <div className="dropdown-menu dropdown-menu-end" style={{minHeight: '123px'}}>
+                              <div
+                                className="dropdown-menu dropdown-menu-end"
+                                style={{ minHeight: `${(isAdmin || isLibrarian) ? '123px' : 'auto'}` }}
+                              >
                                 <Link
                                   className="dropdown-item"
                                   to={`/books/${book._id}`}
@@ -485,6 +499,9 @@ export default function BrowseBooks() {
                                   <i className="mdi mdi-eye text-muted fs-16 align-middle me-1"></i>
                                   <span className="align-middle">View</span>
                                 </Link>
+                                
+                                {(isAdmin || isLibrarian) && (
+                                  <>
                                 <Link
                                   className="dropdown-item"
                                   to={`/books/${book._id}`}
@@ -495,13 +512,17 @@ export default function BrowseBooks() {
                                 <Link
                                   className="dropdown-item"
                                   to={``}
-                                  onClick={() => handleDelete(book._id)}
+                                  onClick={() => setBookID(book._id)}
+                                  data-bs-toggle="modal"
+                                  data-bs-target=".bs-example-modal-deletebook"
                                 >
                                   <i className="mdi mdi-delete text-danger fs-16 align-middle me-1"></i>
                                   <span className="align-middle  text-danger ">
                                     Delete
                                   </span>
                                 </Link>
+                                  </>
+                                )}
                               </div>
                             </div>
                           </td>
@@ -570,6 +591,51 @@ export default function BrowseBooks() {
                 </ul>
               </nav>
             )}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="modal fade bs-example-modal-deletebook"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="mySmallModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body text-center p-5">
+              <lord-icon
+                src="https://cdn.lordicon.com/hrqwmuhr.json"
+                trigger="loop"
+                colors="primary:#121331,secondary:#08a88a"
+                style={{ width: "120px", height: "120px" }}
+              ></lord-icon>
+              <div className="mt-4">
+                <h4 className="mb-3">Confirm!</h4>
+                <p className="text-muted mb-4">
+                  {" "}
+                  Are you sure you want to delete this book?
+                </p>
+                <div className="hstack gap-2 justify-content-center">
+                  <button
+                    type="button"
+                    className="btn btn-light"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <a
+                    href="javascript:void(0);"
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    onClick={(e) => handleDelete(e, BookID)}
+                  >
+                    Confirm
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

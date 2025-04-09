@@ -40,6 +40,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
     "underGraduate",
     "postGraduate",
     "faculty",
+    "nonTeachingStaff",
     "researcher",
   ].includes(userRole);
   const isAdmin = userRole === "admin";
