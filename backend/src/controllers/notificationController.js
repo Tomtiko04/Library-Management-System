@@ -278,6 +278,15 @@ exports.markAsRead = async (req, res) => {
 		// Fetch notification ID from the request (assumes notification ID is passed as a parameter)
 		const notificationId = req.params.notificationId;
 
+		// Update the notification's "read" status to true
+		const notification = await Notification.findByIdAndUpdate(
+			notificationId,
+			{ read: true },
+			{ new: true } // Return the updated document
+		);
+
+		// If the notification is not found, return an error
+
 		if (!notification) {
 			return res.status(404).json({
 				status: "error",
