@@ -94,6 +94,18 @@ table tbody tr:hover {
     align-items: center;
     min-height: 80vh;
 }
+
+.menu-link.active {
+    color: rgb(64, 81, 137) !important;
+    background-color: #f3f3f9 !important;
+    border-radius: 0 !important;
+}
+.menu-link.active:hover {
+    color: rgb(64, 81, 137) !important;
+    background-color: #f3f3f9 !important;
+    border-radius: 0 !important;
+}
+
 /* Overlay for mobile */
 @media (max-width: 768px) {
     .sidebar-overlay {
