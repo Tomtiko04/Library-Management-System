@@ -51,11 +51,6 @@ exports.borrowBook = async (req, res) => {
 			});
 		}
 
-		// Check if the book is available
-		if (book.availableCopies <= 0) {
-			return res.status(400).json({ message: "No copies of this book are currently available." });
-		}
-
 		// Assign due date based on role
 		const loanDuration = user.role === "underGraduate" ? 7 : 14; // 7 days for undergrads, 14 days for others
 		const dueDate = new Date();

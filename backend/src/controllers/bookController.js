@@ -1,5 +1,5 @@
 const Book = require("../models/bookModel");
-const APIFeatures = require("../utilis/apiFeatures");
+const APIFeatures = require("../utils/apiFeatures");
 
 // ✅ Create a Book (Admin/Librarian Only)
 exports.createBook = async (req, res) => {
