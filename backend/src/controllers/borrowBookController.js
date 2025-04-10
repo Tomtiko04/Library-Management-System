@@ -2,6 +2,7 @@ const BorrowedBook = require("../models/borrowedBookModel");
 const Book = require("../models/bookModel");
 const User = require("../models/userModel");
 const Fine = require("../models/fineModel");
+const { joinWaitlist } = require("./waitListController");
 const { notifyNextUser } = require("../controllers/notificationController");
 
 // Borrow a Book
@@ -35,6 +36,11 @@ exports.borrowBook = async (req, res) => {
 				.json({ message: "You have unpaid fines. Please pay before borrowing more books." });
 		}
 
+		// ✅ Check if the book is available
+		if (book.availableCopies <= 0) {
+			return joinWaitlist(req, res); // Reuse the joinWaitlist function
+		}
+
 		// Borrowing limits based on user role
 		const borrowingLimits = {
 			underGraduate: 2,
@@ -49,11 +55,6 @@ exports.borrowBook = async (req, res) => {
 			return res.status(400).json({
 				message: "You have no available borrower tickets. Return a book to borrow another.",
 			});
-		}
-
-		// Check if the book is available
-		if (book.availableCopies <= 0) {
-			return res.status(400).json({ message: "No copies of this book are currently available." });
 		}
 
 		// Assign due date based on role
@@ -242,7 +243,7 @@ exports.returnBook = async (req, res) => {
 		await borrowedBook.save();
 		await user.save();
 
-		await notifyNextUser(returnedBook._id);
+		await notifyNextUser(bookId);
 
 		res.status(200).json({
 			message: "Book returned successfully",

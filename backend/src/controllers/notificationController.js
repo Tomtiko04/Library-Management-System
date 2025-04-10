@@ -286,6 +286,7 @@ exports.markAsRead = async (req, res) => {
 		);
 
 		// If the notification is not found, return an error
+
 		if (!notification) {
 			return res.status(404).json({
 				status: "error",
