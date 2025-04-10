@@ -1,4 +1,5 @@
 const Waitlist = require("../models/waitList");
+const sendEmail = require("../utils/sendEmail");
 
 exports.joinWaitlist = async (req, res) => {
 	try {
@@ -15,6 +16,13 @@ exports.joinWaitlist = async (req, res) => {
 
 		const waitlistEntry = new Waitlist({ user: userId, book: bookId });
 		await waitlistEntry.save();
+
+		 // Notify the user via email
+		await sendEmail({
+            to: req.user.email, 
+            subject: "Waitlist Confirmation - Library Management System",
+            text: `Dear ${req.user.name},\n\nYou have been added to the waitlist for the book with ID: ${bookId}.\n\nWe will notify you when the book becomes available.\n\nBest regards,\nLibrary Management Team`,
+        });
 
 		res.status(201).json({ message: "Added to waitlist successfully", waitlistEntry });
 	} catch (error) {
