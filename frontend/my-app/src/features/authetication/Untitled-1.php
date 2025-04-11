@@ -4844,7 +4844,7 @@ const Layout = () => {
 			</div>
 
 			{/* <!-- Theme Settings --> */}
-			<div className="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
+			<div className="offcanvas offcanvas-end border-0" tabIndex="-1" id="theme-settings-offcanvas">
 				<div className="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
 					<h5 className="m-0 me-2 text-white">Theme Customizer</h5>
 

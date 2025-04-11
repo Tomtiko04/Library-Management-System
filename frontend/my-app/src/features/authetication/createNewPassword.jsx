@@ -3,6 +3,7 @@ import Logo from "../../UI/Logo";
 import Footer from "../../UI/Footer";
 import ParticlesBackground from "../../UI/ParticlesBackground";
 import { Link } from "react-router-dom"; // Corrected import
+import toast from "react-hot-toast";
 
 export default function CreateNewPassword() {
 	const [password, setPassword] = useState("");
@@ -59,7 +60,8 @@ export default function CreateNewPassword() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (validateForm()) {
-			console.log("Password reset successful");
+			toast.success("Password reset successful");
+			// console.log("Password reset successful");
 		}
 	};
 
