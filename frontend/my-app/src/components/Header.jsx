@@ -589,7 +589,7 @@ export default function Header({ isSidebarOpen, toggleSidebar }) {
                         {userDetails.name}
                       </span>
                       <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
-                        {userDetails.libraryId}
+                        {userDetails.libraryId ? userDetails.libraryId : userDetails.role?.toUpperCase()}
                       </span>
                     </span>
                   </span>
@@ -664,7 +664,7 @@ export default function Header({ isSidebarOpen, toggleSidebar }) {
 
       <div
         className="modal fade bs-example-modal-center01"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="mySmallModalLabel"
         aria-hidden="true"

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../Sidebar";
 import Header from "../Header";
 import axiosInstance from "../../utils/axiosInstance";
+import { Link } from "react-router-dom";
 
 const BorrowingHistory = () => {
 	const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -57,7 +58,7 @@ const BorrowingHistory = () => {
 										<div className="page-title-right">
 											<ol className="breadcrumb m-0">
 												<li className="breadcrumb-item">
-													<a href="">Books</a>
+													<Link to="/dashboard">Dashboard</Link>
 												</li>
 												<li className="breadcrumb-item active">Borrowing History</li>
 											</ol>

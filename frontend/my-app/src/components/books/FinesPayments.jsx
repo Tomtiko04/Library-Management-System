@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Sidebar";
 import Header from "../Header";
+import { Link } from "react-router-dom";
 
 const FinesPayments = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +21,7 @@ const FinesPayments = () => {
                     <div className="page-title-right">
                       <ol className="breadcrumb m-0">
                         <li className="breadcrumb-item">
-                          <a href="">Books</a>
+                          <Link to="/dashboard">Dashboard</Link>
                         </li>
                         <li className="breadcrumb-item active">Fines & Payments</li>
                       </ol>

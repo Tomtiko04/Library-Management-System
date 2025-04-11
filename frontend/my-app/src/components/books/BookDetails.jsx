@@ -15,10 +15,10 @@ const BookDetails = () => {
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
-        console.log("Book ID:", id); // Log the book ID
+        // console.log("Book ID:", id); // Log the book ID
         const response = await axiosInstance.get(`/books/${id}`);
         setBook(response.data.book);
-        console.log("Book Details:", response.data.book); // Log the book details
+        // console.log("Book Details:", response.data.book); // Log the book details
       } catch (error) {
         console.error("Error fetching book details:", error);
         toast.error("Failed to fetch book details");
