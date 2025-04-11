@@ -257,7 +257,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
 
       <div
         className="modal fade bs-example-modal-center01"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="mySmallModalLabel"
         aria-hidden="true"

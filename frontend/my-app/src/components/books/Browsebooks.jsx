@@ -16,7 +16,6 @@ export default function BrowseBooks() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [userRole, setUserRole] = useState(null);
-  const modalRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -138,47 +137,13 @@ export default function BrowseBooks() {
     // }
   };
 
-  const handleRowClick = (bookId) => {
-    navigate(`/books/${bookId}`);
+  const handleGoToCreate = () => {
+    navigate(`/books/create`);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formattedData = {
-      ...formData,
-      publishedYear: Number(formData.publishedYear),
-      totalCopies: Number(formData.totalCopies),
-      availableCopies: Number(formData.availableCopies),
-      createdBy: userId,
-    };
-
-    setIsLoading(true);
-
-    try {
-      const response = await axiosInstance.post("/books", formattedData);
-      console.log("Book created:", response.data);
-
-      if (modalRef.current) {
-        const modal = new window.bootstrap.Modal(modalRef.current);
-        modal.hide();
-      }
-
-      toast.success("Book created successfully!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } catch (error) {
-      console.error("Error creating book:", error);
-      toast.error("Failed to create book.");
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const isBorrower = [
@@ -205,7 +170,7 @@ export default function BrowseBooks() {
                   <div className="page-title-right">
                     <ol className="breadcrumb m-0">
                       <li className="breadcrumb-item">
-                        <a href="">Books</a>
+                        <Link to="/dashboard">Dashboard</Link>
                       </li>
                       <li className="breadcrumb-item active">Book List</li>
                     </ol>
@@ -262,14 +227,14 @@ export default function BrowseBooks() {
                     <option value="asc">Asc</option>
                     <option value="desc">Desc</option>
                   </select>
-                </div>
+                </div>  
 
                 {(isAdmin || isLibrarian) && (
                   <button
                     type="button"
                     className="btn btn-primary w-full me-3"
-                    data-bs-toggle="modal"
-                    data-bs-target=".bs-example-modal-center"
+                    onClick={handleGoToCreate}
+                    style={{whiteSpace: 'nowrap'}}
                   >
                     Add New Book
                   </button>
@@ -277,155 +242,8 @@ export default function BrowseBooks() {
               </div>
             </div>
 
-            <div
-              className="modal fade bs-example-modal-center"
-              ref={modalRef}
-              tabIndex="-1"
-              role="dialog"
-              aria-labelledby="mySmallModalLabel"
-              aria-hidden="true"
-            >
-              <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                  <div className="modal-header mb-0">
-                    <h4 className="mb-0">Add New Book</h4>
-                  </div>
-                  <div className="modal-body text-left p-4 pt-4">
-                    <form onSubmit={handleSubmit}>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="title"
-                          className="form-label d-block text-left w-100"
-                        >
-                          Title
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="title"
-                          name="title"
-                          value={formData.title}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="author"
-                          className="form-label d-block text-left w-100"
-                        >
-                          Author
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="author"
-                          name="author"
-                          value={formData.author}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="isbn"
-                          className="form-label d-block text-left w-100"
-                        >
-                          ISBN
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="isbn"
-                          name="isbn"
-                          value={formData.isbn}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="category"
-                          className="form-label d-block text-left w-100"
-                        >
-                          Category
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="category"
-                          name="category"
-                          value={formData.category}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="publishedYear"
-                          className="form-label d-block text-left w-100"
-                        >
-                          Published Year
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="publishedYear"
-                          name="publishedYear"
-                          value={formData.publishedYear}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="totalCopies"
-                          className="form-label d-block text-left w-100"
-                        >
-                          Total Copies
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="totalCopies"
-                          name="totalCopies"
-                          value={formData.totalCopies}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="availableCopies"
-                          className="form-label d-block text-left w-100"
-                        >
-                          Available Copies
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          id="availableCopies"
-                          name="availableCopies"
-                          value={formData.availableCopies}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        className="btn btn-success"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? "Creating..." : "Create Book"}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {loading ? (
-              <div className="text-center">
+              <div className="text-center py-5 my-5">
                 <div className="spinner-border" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
@@ -504,7 +322,7 @@ export default function BrowseBooks() {
                                   <>
                                 <Link
                                   className="dropdown-item"
-                                  to={`/books/${book._id}`}
+                                  to={`/books/edit/${book._id}`}
                                 >
                                   <i className="mdi mdi-pen text-muted fs-16 align-middle me-1"></i>
                                   <span className="align-middle">Edit</span>
@@ -597,7 +415,7 @@ export default function BrowseBooks() {
 
       <div
         className="modal fade bs-example-modal-deletebook"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="mySmallModalLabel"
         aria-hidden="true"

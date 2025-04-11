@@ -16,6 +16,7 @@ import SignIn from "./features/authetication/signin";
 import SignUp from "./features/authetication/signup";
 import Dashboard from "./components/DashboardLayout";
 import BrowseBooks from "./components/books/Browsebooks";
+import CreateBook from "./components/books/CreateBook";
 import ForgottenPassword from "./features/authetication/forgottenPassword";
 import CreateNewPassword from "./features/authetication/createNewPassword";
 import ManageBooks from "./components/books/ManageBooks";
@@ -30,6 +31,7 @@ import ManageUsers from "./components/books/ManageUsers";
 import Notifications from "./components/books/Notifications";
 import Settings from "./components/books/Settings";
 import UserProfile from "./components/books/UserProfile";
+import EditBook from "./components/books/EditBook";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -96,6 +98,8 @@ function App() {
 						<Route path="/dashboard" element={<Dashboard />} />
 						{/* <Route path="component/browsebooks" element={<BrowseBooks />}/> */}
 						<Route path="/books" element={<BrowseBooks />} />
+						<Route path="/books/create" element={<CreateBook />} />
+						<Route path="/books/edit/:id" element={<EditBook />} />
 						<Route path="/manage-books" element={<ManageBooks />} />
 						<Route path="/all-borrowed" element={<AllBorrowedBooks />} />
 						<Route path="/my-borrowed" element={<MyBorrowedBooks />} />
